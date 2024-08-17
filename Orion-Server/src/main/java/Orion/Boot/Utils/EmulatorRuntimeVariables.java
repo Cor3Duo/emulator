@@ -11,8 +11,13 @@ public class EmulatorRuntimeVariables implements IEmulatorRuntimeVariables {
     public AtomicInteger playersOnline = new AtomicInteger(0);
 
     @Override
-    public void incrementAndGetPlayersOnline() {
+    public void incrementPlayersOnline() {
         this.playersOnline.incrementAndGet();
+    }
+
+    @Override
+    public void decrementPlayersOnline() {
+        this.playersOnline.decrementAndGet();
     }
 
     @Override

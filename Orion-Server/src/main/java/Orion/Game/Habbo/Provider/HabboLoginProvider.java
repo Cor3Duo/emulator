@@ -99,7 +99,7 @@ public class HabboLoginProvider implements IHabboLoginProvider {
 
             this.habboManager.addHabbo(habbo);
 
-            this.runtimeVariables.incrementAndGetPlayersOnline();
+            this.runtimeVariables.incrementPlayersOnline();
 
             this.sendLoginComposers(habbo);
         }, authTicket);

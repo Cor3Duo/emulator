@@ -1,7 +1,9 @@
 package Orion.Api.Server.Boot.Utils;
 
 public interface IEmulatorRuntimeVariables {
-    void incrementAndGetPlayersOnline();
+    void incrementPlayersOnline();
+
+    void decrementPlayersOnline();
 
     int getPlayersOnline();
 }

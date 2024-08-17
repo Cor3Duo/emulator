@@ -1,7 +1,9 @@
 package Orion.Game.Habbo;
 
+import Orion.Api.Server.Boot.Utils.IEmulatorRuntimeVariables;
 import Orion.Api.Server.Game.Habbo.IHabbo;
 import Orion.Api.Server.Game.Habbo.IHabboManager;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,6 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class HabboManager implements IHabboManager {
     private final ConcurrentHashMap<Integer, IHabbo> connectedHabbos;
+
+    @Inject
+    private IEmulatorRuntimeVariables runtimeVariables;
 
     public HabboManager() {
         this.connectedHabbos = new ConcurrentHashMap<>();
@@ -29,6 +34,7 @@ public class HabboManager implements IHabboManager {
         this.removeHabbo(habbo);
 
         habbo.onDisconnect();
+        this.runtimeVariables.decrementPlayersOnline();
     }
 
     @Override
