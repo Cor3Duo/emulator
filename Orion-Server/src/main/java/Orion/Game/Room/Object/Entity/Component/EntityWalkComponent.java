@@ -72,7 +72,7 @@ public class EntityWalkComponent implements IEntityWalkComponent {
 
         final List<Position> walkingPath = this.pathfinder.findPath(
                 this.entity,
-                tile.getPosition(),
+                tile.getRedirectTo() != null ? tile.getRedirectTo() : tile.getPosition(),
                 this.entity.getRoom().getData().getDiagonalType()
         );
 

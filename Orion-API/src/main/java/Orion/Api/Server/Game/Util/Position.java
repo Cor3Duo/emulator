@@ -185,6 +185,14 @@ public class Position {
         return this.getX() == pos.getX() && this.getY() == pos.getY();
     }
 
+    public Position squareInFront(int angle) {
+        return calculatePosition(this.x, this.y, angle, false, 1);
+    }
+
+    public Position squareBehind(int angle) {
+        return calculatePosition(this.x, this.y, angle, true, 1);
+    }
+
     public Position copy() {
         return new Position(this.x, this.y, this.z);
     }

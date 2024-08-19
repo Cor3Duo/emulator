@@ -86,6 +86,46 @@ public class RoomMappingComponent implements IRoomMappingComponent {
 
         if(this.getDoorTile().getPosition().equals(to) && !isLastStep) return false;
 
+        final int rotation = Position.calculateRotation(from, to, false);
+
+        if (rotation == 1 || rotation == 3 || rotation == 5 || rotation == 7) {
+            // Get all tiles at passing corners
+            IRoomTile left = null;
+            IRoomTile right = switch (rotation) {
+                case 1 -> {
+                    left = this.getTile(from.squareInFront(rotation + 1));
+                    yield this.getTile(to.squareBehind(rotation + 1));
+                }
+                case 3 -> {
+                    left = this.getTile(to.squareBehind(rotation + 1));
+                    yield this.getTile(to.squareBehind(rotation - 1));
+                }
+                case 5 -> {
+                    left = this.getTile(from.squareInFront(rotation - 1));
+                    yield this.getTile(to.squareBehind(rotation - 1));
+                }
+                case 7 -> {
+                    left = this.getTile(to.squareBehind(rotation - 1));
+                    yield this.getTile(from.squareInFront(rotation - 1));
+                }
+                default -> null;
+            };
+
+            if (left != null && right != null) {
+                if (left.getMovementNode() != RoomEntityMovementNode.OPEN && right.getState() == RoomTileState.INVALID) {
+                    return false;
+                }
+
+                if (right.getMovementNode() != RoomEntityMovementNode.OPEN && left.getState() == RoomTileState.INVALID) {
+                    return false;
+                }
+
+                if (left.getMovementNode() != RoomEntityMovementNode.OPEN && right.getMovementNode() != RoomEntityMovementNode.OPEN) {
+                    return false;
+                }
+            }
+        }
+
         final IRoomTile tile = this.getTile(to);
 
         if(tile == null) return false;

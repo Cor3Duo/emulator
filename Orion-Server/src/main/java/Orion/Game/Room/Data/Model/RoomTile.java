@@ -92,16 +92,14 @@ public class RoomTile implements IRoomTile {
                     this.movementNode = RoomEntityMovementNode.END_OF_ROUTE;
 
                     if(item.getData().getRotation() == 2 || item.getData().getRotation() == 6) {
-                        this.redirectTo = item.getPosition().copy();
-                        break;
+                        this.redirectTo = new Position(item.getPosition().getX(), this.getPosition().getY());
                     }
 
                     if(item.getData().getRotation() == 0 || item.getData().getRotation() == 4) {
-                        this.redirectTo = this.position.copy();
+                        this.redirectTo = new Position(this.getPosition().getX(), item.getPosition().getY());
                     }
 
                     break;
-
                 case "gate":
                     // TODO: Check others interactions
                     break;
