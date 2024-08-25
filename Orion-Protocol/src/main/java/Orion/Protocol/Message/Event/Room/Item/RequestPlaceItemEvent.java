@@ -19,23 +19,6 @@ public class RequestPlaceItemEvent implements IMessageEventHandler {
 
     @Override
     public void handle(IMessageEvent event, ISession session) {
-        final String data = event.readString();
-
-        final String[] dataParts = data.split(" ");
-
-        if(dataParts.length <= 3) return;
-
-        final int itemId = Integer.parseInt(dataParts[0]);
-        String wallPosition = "";
-
-        if(dataParts[1].startsWith(":")) {
-            wallPosition = String.join(" ", dataParts[1], dataParts[2], dataParts[3]);
-        }
-
-        final int x = Integer.parseInt(dataParts[1]);
-        final int y = Integer.parseInt(dataParts[2]);
-        final int rotation = Integer.parseInt(dataParts[3]);
-
         if(!session.getHabbo().isInRoom()) return;
 
         final IRoom room = session.getHabbo().getEntity().getRoom();
@@ -47,12 +30,32 @@ public class RequestPlaceItemEvent implements IMessageEventHandler {
             return;
         }
 
-        System.out.println(data);
-        System.out.println("-- floor data --");
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println(rotation);
-        System.out.println("-- wall data --");
-        System.out.println(wallPosition);
+        final String data = event.readString();
+        final String[] splitData = data.split(" ");
+
+        if(splitData.length <= 3) return;
+
+        final int virtualItemId = Integer.parseInt(splitData[0]);
+
+        if(splitData[1].startsWith(":")) {
+            this.handleWallItemPlacement(session, splitData);
+            return;
+        }
+
+        try {
+            final int x = Integer.parseInt(splitData[1]);
+            final int y = Integer.parseInt(splitData[2]);
+            final int rotation = Integer.parseInt(splitData[3]);
+
+            FurnitureMovementError movementError = room.getItemsComponent().placeFloorItem(session, virtualItemId, x, y, rotation);
+
+            System.out.println(movementError.get());
+        } catch (Exception error) {
+            session.getHabbo().getLogger().error(STR."Failed to parse item placement data: \{data}");
+        }
+    }
+
+    private void handleWallItemPlacement(ISession session, String[] splitData) {
+        String wallPosition = String.join(" ", splitData[1], splitData[2], splitData[3]);
     }
 }

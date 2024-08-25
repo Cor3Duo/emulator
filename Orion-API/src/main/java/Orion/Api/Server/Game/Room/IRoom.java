@@ -34,6 +34,8 @@ public interface IRoom extends Comparable<IRoom>, IWriteable, Initializable, IDi
 
     IRoomItemsComponent getItemsComponent();
 
+    IRoomChatComponent getChatComponent();
+
     void onEntityRemoved(final IRoomEntity entity);
 
     void broadcastMessage(final IMessageComposer composer);
@@ -43,4 +45,10 @@ public interface IRoom extends Comparable<IRoom>, IWriteable, Initializable, IDi
     boolean habboIsOwner(final IHabbo habbo);
 
     boolean isMuted();
+
+    boolean isInactive();
+
+    void checkInactivity();
+
+    boolean shouldBeUnloaded();
 }

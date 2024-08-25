@@ -7,8 +7,6 @@ import Orion.Api.Server.Game.Room.Object.Item.Data.IRoomItemData;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Item.Interaction.IRoomItemInteraction;
 import Orion.Api.Server.Game.Util.Position;
-import Orion.Api.Storage.Result.IConnectionResult;
-import Orion.Game.Room.Object.Item.Data.RoomItemData;
 import Orion.Protocol.Message.Composer.Room.Object.UpdateFloorItemComposer;
 import Orion.Writer.Room.Object.Item.RoomFloorItemWriter;
 import gnu.trove.map.hash.THashMap;
@@ -33,16 +31,16 @@ public class RoomFloorItem implements IRoomFloorItem {
 
     public RoomFloorItem(
             final int virtualId,
-            final IRoom room,
-            final IConnectionResult data,
-            final IItemDefinition definition
+            final IRoomItemData data,
+            final IItemDefinition definition,
+            final IRoom room
     ) {
         this.virtualId = virtualId;
 
-        this.room = room;
+        this.data = data;
         this.definition = definition;
 
-        this.data = new RoomItemData(data);
+        this.room = room;
 
         this.affectedPositions = new ArrayList<>();
         this.affectedPositions.add(this.data.getPosition());

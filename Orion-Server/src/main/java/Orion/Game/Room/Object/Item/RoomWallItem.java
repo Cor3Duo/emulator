@@ -24,16 +24,16 @@ public class RoomWallItem implements IRoomWallItem {
 
     public RoomWallItem(
             final int virtualId,
-            final IRoom room,
-            final IConnectionResult data,
-            final IItemDefinition definition
+            final IRoomItemData data,
+            final IItemDefinition definition,
+            final IRoom room
     ) {
         this.virtualId = virtualId;
 
-        this.room = room;
+        this.data = data;
         this.definition = definition;
 
-        this.data = new RoomItemData(data);
+        this.room = room;
     }
 
     @Override

@@ -27,4 +27,8 @@ public interface IRoomManager extends Initializable {
     List<IRoom> getLoadedRoomsBy(Predicate<IRoom> predicate);
 
     boolean roomModelExists(String modelName);
+
+    List<IRoom> getRoomsToUnload();
+
+    void removeLoadedRoom(IRoom room);
 }

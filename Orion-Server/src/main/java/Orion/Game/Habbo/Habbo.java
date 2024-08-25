@@ -62,6 +62,11 @@ public class Habbo implements IHabbo {
     }
 
     @Override
+    public Logger getLogger() {
+        return this.logger;
+    }
+
+    @Override
     public ISession getSession() {
         return this.session;
     }

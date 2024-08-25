@@ -27,7 +27,6 @@ public class RoomProcess implements IRoomProcess {
     private boolean processing = false;
 
     private final RoomItemProcess roomItemProcess;
-
     private final HabboEntityProcess habboEntityProcess;
 
     public RoomProcess(final IRoom room) {
@@ -62,6 +61,8 @@ public class RoomProcess implements IRoomProcess {
 
         try {
             this.habboEntityProcess.process();
+
+            this.room.checkInactivity();
         } catch (final Exception e) {
             this.logger.error(STR."Error processing room [\{this.room.getData().getId()}]", e);
         }

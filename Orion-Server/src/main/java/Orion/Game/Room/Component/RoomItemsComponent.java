@@ -1,8 +1,11 @@
 package Orion.Game.Room.Component;
 
+import Orion.Api.Networking.Session.ISession;
+import Orion.Api.Server.Game.Habbo.Data.Inventory.IHabboInventoryItem;
 import Orion.Api.Server.Game.Room.Component.IRoomItemsComponent;
 import Orion.Api.Server.Game.Room.Data.Model.IRoomTile;
 import Orion.Api.Server.Game.Room.IRoom;
+import Orion.Api.Server.Game.Room.Object.Item.Data.IRoomItemData;
 import Orion.Api.Server.Game.Room.Object.Item.Enum.FurnitureMovementError;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
@@ -10,7 +13,9 @@ import Orion.Api.Server.Game.Room.Object.Item.IRoomWallItem;
 import Orion.Api.Server.Game.Room.Object.Item.ItemDefinitionType;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Api.Storage.Repository.Room.IRoomItemsRepository;
+import Orion.Game.Room.Object.Item.Data.RoomItemData;
 import Orion.Game.Room.Object.Item.Factory.RoomItemFactory;
+import Orion.Protocol.Message.Composer.Room.Object.AddFloorItemComposer;
 import Orion.Protocol.Message.Composer.Room.Object.UpdateFloorItemComposer;
 import Orion.Protocol.Message.Composer.Room.UpdateTileStackHeightComposer;
 import com.google.inject.Inject;
@@ -78,11 +83,63 @@ public class RoomItemsComponent implements IRoomItemsComponent {
     }
 
     @Override
+    public FurnitureMovementError placeFloorItem(final ISession session, int virtualItemId, int x, int y, int rotation) {
+        final IHabboInventoryItem item = session.getHabbo().getInventory().getItemsComponent().getItemById(virtualItemId);
+
+        if(item == null) {
+            return FurnitureMovementError.INVALID_MOVE;
+        }
+
+        final IRoomTile targetTile = this.room.getMappingComponent().getTile(x, y);
+
+        if(targetTile == null) {
+            return FurnitureMovementError.INVALID_MOVE;
+        }
+
+        if(this.floorItems.size() + this.wallItems.size() >= 2500) { // TODO: Fetch this from configuration
+            return FurnitureMovementError.MAX_ITEMS;
+        }
+
+        final FurnitureMovementError furnitureMovementError = this.checkItemMovementError(Position.getAffectedPositions(
+                item.getItemDefinition().getLength(), item.getItemDefinition().getWidth(), rotation, targetTile.getPosition()
+        ));
+
+        if(!furnitureMovementError.equals(FurnitureMovementError.NONE)) {
+            return furnitureMovementError;
+        }
+
+        // Save item
+
+        try {
+            final IRoomItemData roomItemData = new RoomItemData(item, session.getHabbo(), new Position(x, y, targetTile.getStackHeight()), rotation);
+            final IRoomFloorItem roomFloorItem = this.itemFactory.createFloorItem(
+                    this.virtualIdPointer.getAndIncrement(),
+                    roomItemData,
+                    this.room,
+                    item.getItemDefinition()
+            );
+
+            session.send(new AddFloorItemComposer(roomFloorItem));
+        } catch (Exception error) {
+            session.getHabbo().getLogger().error("Error while creating the room floor item", error);
+
+            return FurnitureMovementError.INVALID_MOVE;
+        }
+
+        return FurnitureMovementError.NONE;
+    }
+
+    @Override
     public FurnitureMovementError applyItemMovement(final IRoomFloorItem item, Position position, int rotation) {
         final IRoomTile targetTile = this.room.getMappingComponent().getTile(position);
 
         if(targetTile == null) {
             return FurnitureMovementError.INVALID_MOVE;
+        }
+
+        if(targetTile.getPosition().equals(item.getPosition()) && rotation == item.getData().getRotation()) {
+            System.out.println("position and rotation are the same");
+            return FurnitureMovementError.NONE;
         }
 
         final List<Position> newAffectedPositions = new ArrayList<>() {
@@ -96,7 +153,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
             ));
         }
 
-        final FurnitureMovementError error = this.checkItemMovementError(item, targetTile, rotation, newAffectedPositions);
+        final FurnitureMovementError error = this.checkItemMovementError(newAffectedPositions);
 
         if(!error.equals(FurnitureMovementError.NONE)) {
             return error;
@@ -107,16 +164,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
         return FurnitureMovementError.NONE;
     }
 
-    private FurnitureMovementError checkItemMovementError(final IRoomFloorItem item, IRoomTile targetTile, int rotation, final List<Position> newAffectedPositions) {
-        if(this.floorItems.size() + this.wallItems.size() >= 2500) { // TODO: Fetch this from configuration
-            return FurnitureMovementError.MAX_ITEMS;
-        }
-
-        if(targetTile.getPosition().equals(item.getPosition()) && rotation == item.getData().getRotation()) {
-            System.out.println("position and rotation are the same");
-            return FurnitureMovementError.NONE;
-        }
-
+    private FurnitureMovementError checkItemMovementError(final List<Position> newAffectedPositions) {
         for (final Position affectedPosition : newAffectedPositions) {
             if(affectedPosition.getX() < 0 || affectedPosition.getY() < 0 || affectedPosition.getX() >= this.room.getModel().getMapSizeX() || affectedPosition.getY() >= this.room.getModel().getMapSizeY()) {
                 System.out.println("Invalid position in the map size");
@@ -130,7 +178,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
                 return FurnitureMovementError.INVALID_MOVE;
             }
 
-            if(affectedTile.getTopItem() != null && affectedTile.getTopItem().getData().getId() == item.getData().getId()) continue;
+            //if(affectedTile.getTopItem() != null && affectedTile.getTopItem().getData().getId() == item.getData().getId()) continue;
 
             if(!affectedTile.canStack()) {
                 System.out.println("tile cannot stack");
@@ -140,7 +188,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
 
             if(!affectedTile.getEntities().isEmpty()) {
                 System.out.println("tile has habbos");
-                return FurnitureMovementError.TILE_HAS_HABBOS;
+                return FurnitureMovementError.TILE_HAS_ENTITIES;
             }
 
             if(affectedTile.getTopItem() != null && !affectedTile.getTopItem().getDefinition().isAllowStack()) {
@@ -183,7 +231,11 @@ public class RoomItemsComponent implements IRoomItemsComponent {
         this.repository.loadItemsByRoomId(result -> {
             if(result == null) return;
 
-            final IRoomItem loadedItem = this.itemFactory.create(this.virtualIdPointer.getAndIncrement(), result, this.room);
+            final IRoomItem loadedItem = this.itemFactory.create(
+                    this.virtualIdPointer.getAndIncrement(),
+                    new RoomItemData(result),
+                    this.room
+            );
 
             if(loadedItem == null) return;
 

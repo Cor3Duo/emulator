@@ -139,8 +139,27 @@ public class Position {
         return rotation;
     }
 
-    public static List<Position> getAffectedPositions(int length, int width, int rotation, Position position) {
+    public static List<Position> getAffectedPositions(
+            int length,
+            int width,
+            int rotation,
+            Position position
+    ) {
+        return getAffectedPositions(length, width, rotation, position, false);
+    }
+
+    public static List<Position> getAffectedPositions(
+            int length,
+            int width,
+            int rotation,
+            Position position,
+            boolean shouldAddOriginalPosition
+    ) {
         final List<Position> positions = new ArrayList<>();
+
+        if(shouldAddOriginalPosition) {
+            positions.add(position);
+        }
 
         for(int y = 0; y < length; y++) {
             for(int x = 0; x < width; x++) {

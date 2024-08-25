@@ -24,6 +24,11 @@ public class InventoryItemsComponent implements IInventoryItemsComponent {
     }
 
     @Override
+    public IHabboInventoryItem getItemById(long itemId) {
+        return this.items.get(itemId);
+    }
+
+    @Override
     public void dispose() {
         this.items.clear();
     }

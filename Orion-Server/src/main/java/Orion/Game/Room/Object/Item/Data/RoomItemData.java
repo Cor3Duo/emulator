@@ -1,5 +1,7 @@
 package Orion.Game.Room.Object.Item.Data;
 
+import Orion.Api.Server.Game.Habbo.Data.Inventory.IHabboInventoryItem;
+import Orion.Api.Server.Game.Habbo.IHabbo;
 import Orion.Api.Server.Game.Room.Object.Item.Data.ILimitedEditionData;
 import Orion.Api.Server.Game.Room.Object.Item.Data.IRoomItemData;
 import Orion.Api.Server.Game.Util.Position;
@@ -34,6 +36,25 @@ public class RoomItemData implements IRoomItemData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public RoomItemData(
+            final IHabboInventoryItem item,
+            final IHabbo habbo,
+            Position position,
+            int rotation
+    ) {
+        this.id = (int) item.getId();
+        this.ownerId = habbo.getData().getId();
+        this.itemId = item.getItemDefinition().getId();
+        this.position = position;
+        this.rotation = rotation;
+        this.wallPosition = "";
+        this.extraData = item.getExtraData();
+        this.wiredData = "";
+        this.groupId = 0;
+        this.ownerName = habbo.getData().getUsername();
+        this.limitedData = item.getLimitedEditionData();
     }
 
     @Override

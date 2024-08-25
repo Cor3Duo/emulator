@@ -50,6 +50,9 @@ public class RoomManager implements IRoomManager {
     @Inject
     private RoomModelFactory roomModelFactory;
 
+    @Inject
+    private RoomGlobalCycle roomGlobalCycle;
+
     public RoomManager() {
         this.rooms = new ConcurrentHashMap<>();
         this.roomModels = new ConcurrentHashMap<>();
@@ -65,6 +68,8 @@ public class RoomManager implements IRoomManager {
         this.loadStaffPickedRooms();
 
         this.roomEnvironmentVariables.initialize();
+
+        this.roomGlobalCycle.start();
     }
 
     private void loadPublicRooms() {
@@ -152,6 +157,11 @@ public class RoomManager implements IRoomManager {
     }
 
     @Override
+    public void removeLoadedRoom(IRoom room) {
+        this.rooms.remove(room.getData().getId());
+    }
+
+    @Override
     public IRoom getRoomById(int roomId) {
         return this.rooms.get(roomId);
     }
@@ -194,6 +204,11 @@ public class RoomManager implements IRoomManager {
     @Override
     public boolean roomCategoryExists(int categoryId) {
         return this.roomCategories.containsKey(categoryId);
+    }
+
+    @Override
+    public List<IRoom> getRoomsToUnload() {
+        return this.getLoadedRoomsBy(IRoom::shouldBeUnloaded);
     }
 
     @Override

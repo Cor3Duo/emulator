@@ -4,11 +4,14 @@ import Orion.Api.Networking.Session.ISession;
 import Orion.Api.Server.Game.Habbo.Compositions.IStatusable;
 import Orion.Api.Server.Game.Habbo.Data.*;
 import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
+import org.apache.logging.log4j.Logger;
 
 public interface IHabbo extends IStatusable {
     void setSession(ISession session);
 
     ISession getSession();
+
+    Logger getLogger();
 
     IHabboData getData();
 

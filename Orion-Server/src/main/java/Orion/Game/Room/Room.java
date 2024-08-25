@@ -24,6 +24,7 @@ public class Room implements IRoom {
 
     private boolean isMuted = false;
     private boolean isFullyLoaded = false;
+    private int inactiveCycles = 0;
 
     private final IRoomBansComponent roomBansComponent;
     private final IRoomItemsComponent roomItemsComponent;
@@ -31,6 +32,7 @@ public class Room implements IRoom {
     private final IRoomRightsComponent roomRightsComponent;
     private final IRoomMappingComponent roomMappingComponent;
     private final IRoomEntitiesComponent roomEntitiesComponent;
+    private final IRoomChatComponent roomChatComponent;
 
     public Room(final IConnectionResult data, final IRoomModel model) {
         this.model = model;
@@ -41,6 +43,7 @@ public class Room implements IRoom {
         this.roomRightsComponent = new RoomRightsComponent(this);
         this.roomMappingComponent = new RoomMappingComponent(this);
         this.roomEntitiesComponent = new RoomEntitiesComponent(this);
+        this.roomChatComponent = new RoomChatComponent(this);
 
         this.roomBansComponent = new RoomBansComponent();
         this.roomVotesComponent = new RoomVotesComponent();
@@ -106,6 +109,11 @@ public class Room implements IRoom {
     }
 
     @Override
+    public IRoomChatComponent getChatComponent() {
+        return this.roomChatComponent;
+    }
+
+    @Override
     public boolean isFullyLoaded() {
         return this.isFullyLoaded;
     }
@@ -123,6 +131,27 @@ public class Room implements IRoom {
     @Override
     public boolean isMuted() {
         return this.isMuted;
+    }
+
+    @Override
+    public boolean isInactive() {
+        return this.getEntitiesComponent().getHabboEntities().isEmpty();
+    }
+
+    @Override
+    public boolean shouldBeUnloaded() {
+        // If the room is inactive and fully loaded, we can safely unload it after 1 minute.
+        return this.isInactive() && this.isFullyLoaded() && this.inactiveCycles >= 120;
+    }
+
+    @Override
+    public void checkInactivity() {
+        if(!this.isInactive()) {
+            this.inactiveCycles = 0;
+            return;
+        }
+
+        this.inactiveCycles++;
     }
 
     @Override

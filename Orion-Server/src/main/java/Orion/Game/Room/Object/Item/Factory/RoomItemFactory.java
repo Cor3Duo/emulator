@@ -3,10 +3,12 @@ package Orion.Game.Room.Object.Item.Factory;
 import Orion.Api.Server.Game.Room.IRoom;
 import Orion.Api.Server.Game.Room.Object.Item.*;
 import Orion.Api.Server.Game.Room.Object.Item.Base.IItemDefinition;
+import Orion.Api.Server.Game.Room.Object.Item.Data.IRoomItemData;
 import Orion.Api.Server.Game.Room.Object.Item.Interaction.IRoomItemInteraction;
 import Orion.Api.Storage.Result.IConnectionResult;
 import Orion.Api.Util.Initializable;
 import Orion.Game.Room.Object.Item.Composition.InteractionName;
+import Orion.Game.Room.Object.Item.Data.RoomItemData;
 import Orion.Game.Room.Object.Item.Interaction.RoomItemInteraction;
 import Orion.Game.Room.Object.Item.RoomFloorItem;
 import Orion.Game.Room.Object.Item.RoomWallItem;
@@ -17,7 +19,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 
-import java.lang.reflect.Constructor;
 import java.util.Set;
 
 @Singleton
@@ -54,9 +55,9 @@ public class RoomItemFactory implements Initializable {
         this.logger.debug("[{}] interactions loaded successfully.", this.interactions.size());
     }
 
-    public IRoomItem create(int virtualId, final IConnectionResult data, final IRoom room) {
+    public IRoomItem create(int virtualId, final IRoomItemData data, final IRoom room) {
         try {
-            final IItemDefinition definition = this.itemManager.getItemDefinitionById(data.getInt("item_id"));
+            final IItemDefinition definition = this.itemManager.getItemDefinitionById(data.getItemId());
 
             if(definition == null) return null;
 
@@ -74,12 +75,12 @@ public class RoomItemFactory implements Initializable {
 
     public IRoomFloorItem createFloorItem(
             int virtualId,
-            final IConnectionResult data,
+            final IRoomItemData data,
             final IRoom room,
             final IItemDefinition definition
     ) {
         try {
-            final IRoomFloorItem item = new RoomFloorItem(virtualId, room, data, definition);
+            final IRoomFloorItem item = new RoomFloorItem(virtualId, data, definition, room);
             String interactionType = definition.getInteractionType().toLowerCase();
 
             if(!this.interactions.containsKey(definition.getInteractionType().toLowerCase())) {
@@ -109,12 +110,12 @@ public class RoomItemFactory implements Initializable {
 
     public IRoomWallItem createWallItem(
             int virtualId,
-            final IConnectionResult data,
+            final IRoomItemData data,
             final IRoom room,
             final IItemDefinition definition
     ) {
         try {
-            final IRoomWallItem item = new RoomWallItem(virtualId, room, data, definition);
+            final IRoomWallItem item = new RoomWallItem(virtualId, data, definition, room);
             String interactionType = definition.getInteractionType().toLowerCase();
 
             if(!this.interactions.containsKey(definition.getInteractionType().toLowerCase())) {

@@ -10,4 +10,6 @@ public interface IInventoryItemsComponent extends IDisposable {
     Collection<IHabboInventoryItem> getItems();
 
     void setItems(ConcurrentHashMap<Long, IHabboInventoryItem> items);
+
+    IHabboInventoryItem getItemById(long itemId);
 }
