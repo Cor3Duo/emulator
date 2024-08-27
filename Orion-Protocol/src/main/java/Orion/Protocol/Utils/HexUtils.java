@@ -14,4 +14,8 @@ public abstract class HexUtils {
 
         return string.substring(0, length);
     }
+
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
 }

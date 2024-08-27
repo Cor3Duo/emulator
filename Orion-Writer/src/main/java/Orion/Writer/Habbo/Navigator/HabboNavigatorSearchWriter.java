@@ -6,12 +6,12 @@ import Orion.Api.Server.Game.Habbo.Data.Navigator.IHabboNavigatorSearch;
 public abstract class HabboNavigatorSearchWriter {
     public static void write(
             IHabboNavigatorSearch search,
-            IMessageComposer packet
+            IMessageComposer composer
     ) {
-        packet.appendInt(search.getId());
-        packet.appendString(search.getSearchCode());
-        packet.appendString(search.getFilter());
-        packet.appendString("");
+        composer.appendInt(search.getId());
+        composer.appendString(search.getSearchCode());
+        composer.appendString(search.getFilter());
+        composer.appendString("");
     }
 }
 

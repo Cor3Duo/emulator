@@ -37,17 +37,17 @@ public class ServerMessageHandler implements IServerMessageHandler {
             final IMessageEventHandler messageEventHandler = this.messageEventProvider.getMessageEventByHeaderId(headerId);
 
             if(messageEventHandler == null) {
-                //this.logger.warn(STR."[\{headerId}] Received message with unknown header.");
+                this.logger.warn(STR."[\{headerId}] Received message with unknown header.");
                 return;
             }
 
             if(!session.isAuthenticated() && !messageEventHandler.getClass().isAnnotationPresent(HandshakeEvent.class)) {
-                //this.logger.warn(STR."[\{headerId}] Received handshake event without being authenticated from [\{session.getIpAddress()}] address.");
+                this.logger.warn(STR."[\{headerId}] Received handshake event without being authenticated from [\{session.getIpAddress()}] address.");
                 this.sessionManager.disposeSession(session);
                 return;
             }
 
-            //this.logger.debug(STR.">> Handling Event [\{message.getId()}] \{messageEventHandler.getClass().getSimpleName()}");
+            this.logger.debug(STR.">> Handling Event [\{message.getId()}] \{messageEventHandler.getClass().getSimpleName()}");
 
             messageEventHandler.handle(message, session);
         } catch (Exception e) {

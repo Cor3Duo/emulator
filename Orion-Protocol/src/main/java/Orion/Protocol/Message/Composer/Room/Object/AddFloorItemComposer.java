@@ -8,6 +8,6 @@ public class AddFloorItemComposer extends MessageComposer {
     public AddFloorItemComposer(final IRoomFloorItem item) {
         super(ComposerHeaders.AddFloorItemComposer);
 
-        item.write(this);
+        item.write(this, true);
     }
 }

@@ -11,7 +11,7 @@ public enum RoomQuery {
 
     LOAD_CUSTOM_ROOM_MODEL("SELECT * FROM room_models_custom WHERE id = ?"),
 
-    CREATE_ROOM("INSERT INTO rooms (owner_id, owner_name, name, description, model, users_max, category, trade_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"),
+    CREATE_ROOM("INSERT INTO rooms (owner_id, owner_name, name, description, model, category, users_max, trade_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"),
 
     SELECT_ROOM_BY_ID("SELECT * FROM rooms WHERE id = ? LIMIT 1"),
 

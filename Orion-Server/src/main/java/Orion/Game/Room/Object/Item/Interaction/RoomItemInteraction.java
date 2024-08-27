@@ -1,6 +1,7 @@
 package Orion.Game.Room.Object.Item.Interaction;
 
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Item.Interaction.IRoomItemInteraction;
 
 public class RoomItemInteraction implements IRoomItemInteraction {
@@ -67,12 +68,22 @@ public class RoomItemInteraction implements IRoomItemInteraction {
     }
 
     @Override
+    public void onStateChanged(IRoomEntity entity) {
+        // Override this method to add custom logic
+    }
+
+    @Override
     public void onEntityEnter(IRoomEntity entity) {
         // Override this method to add custom logic
     }
 
     @Override
     public void onEntityLeave(IRoomEntity entity) {
+        // Override this method to add custom logic
+    }
+
+    @Override
+    public void onItemAddedToStack(IRoomFloorItem item) {
         // Override this method to add custom logic
     }
 }

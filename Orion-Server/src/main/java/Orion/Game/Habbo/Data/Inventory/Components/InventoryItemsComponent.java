@@ -2,11 +2,14 @@ package Orion.Game.Habbo.Data.Inventory.Components;
 
 import Orion.Api.Server.Game.Habbo.Data.Inventory.Components.IInventoryItemsComponent;
 import Orion.Api.Server.Game.Habbo.Data.Inventory.IHabboInventoryItem;
+import Orion.Api.Server.Game.Habbo.IHabbo;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InventoryItemsComponent implements IInventoryItemsComponent {
+    private IHabbo habbo;
+
     private final ConcurrentHashMap<Long, IHabboInventoryItem> items;
 
     public InventoryItemsComponent() {
@@ -26,6 +29,11 @@ public class InventoryItemsComponent implements IInventoryItemsComponent {
     @Override
     public IHabboInventoryItem getItemById(long itemId) {
         return this.items.get(itemId);
+    }
+
+    @Override
+    public void removeItem(long itemId) {
+        this.items.remove(itemId);
     }
 
     @Override

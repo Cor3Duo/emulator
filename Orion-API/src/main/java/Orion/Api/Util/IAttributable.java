@@ -8,4 +8,6 @@ public interface IAttributable {
     boolean hasAttribute(String key);
 
     void removeAttribute(String key);
+
+    void toggleState();
 }

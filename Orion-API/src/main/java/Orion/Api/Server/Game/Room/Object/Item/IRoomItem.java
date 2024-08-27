@@ -16,4 +16,6 @@ public interface IRoomItem extends IRoomObject {
     IRoomItemInteraction getInteraction();
 
     void write(final IMessageComposer composer);
+
+    void write(final IMessageComposer composer, final boolean shouldComposeOwnerName);
 }

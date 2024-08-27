@@ -11,6 +11,7 @@ import Orion.Api.Util.IDisposable;
 import Orion.Api.Util.IPositionable;
 import Orion.Api.Util.Initializable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -40,6 +41,8 @@ public interface IRoomTile extends IPositionable, Initializable, IDisposable {
     Position getRedirectTo();
 
     Set<IRoomEntity> getEntities();
+
+    List<IRoomFloorItem> getFloorItems();
 
     void scheduleEvent(int entityId, Consumer<IRoomEntity> event);
 

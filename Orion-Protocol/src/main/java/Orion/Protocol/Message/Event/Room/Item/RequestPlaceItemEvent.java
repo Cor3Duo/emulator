@@ -47,9 +47,11 @@ public class RequestPlaceItemEvent implements IMessageEventHandler {
             final int y = Integer.parseInt(splitData[2]);
             final int rotation = Integer.parseInt(splitData[3]);
 
-            FurnitureMovementError movementError = room.getItemsComponent().placeFloorItem(session, virtualItemId, x, y, rotation);
+            final FurnitureMovementError movementError = room.getItemsComponent().placeFloorItem(session, virtualItemId, x, y, rotation);
 
-            System.out.println(movementError.get());
+            if(movementError.equals(FurnitureMovementError.NONE)) return;
+
+            session.send(new MiddleAlertComposer(MiddleAlertType.FURNITURE_PLACEMENT_ERROR, movementError));
         } catch (Exception error) {
             session.getHabbo().getLogger().error(STR."Failed to parse item placement data: \{data}");
         }

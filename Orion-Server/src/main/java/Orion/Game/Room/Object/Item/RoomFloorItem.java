@@ -8,6 +8,7 @@ import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Item.Interaction.IRoomItemInteraction;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Protocol.Message.Composer.Room.Object.UpdateFloorItemComposer;
+import Orion.Protocol.Utils.HexUtils;
 import Orion.Writer.Room.Object.Item.RoomFloorItemWriter;
 import gnu.trove.map.hash.THashMap;
 
@@ -144,7 +145,29 @@ public class RoomFloorItem implements IRoomFloorItem {
     }
 
     @Override
+    public void toggleState() {
+        String data = this.getData().getExtraData();
+
+        if (!HexUtils.isNumeric(data)) return;
+
+        int interactionCycleCount = this.getDefinition().getInteractionModesCount();
+
+        if (interactionCycleCount <= 1) return;
+
+        final int cycleValue = data.isEmpty() || data.trim().isEmpty() ? 0 : Integer.parseInt(data);
+
+        this.getData().setExtraData(String.valueOf(
+                (cycleValue + 1) % interactionCycleCount
+        ));
+    }
+
+    @Override
     public void write(final IMessageComposer composer) {
-        RoomFloorItemWriter.write(this, composer);
+        this.write(composer, false);
+    }
+
+    @Override
+    public void write(final IMessageComposer composer, final boolean shouldComposeOwnerName) {
+        RoomFloorItemWriter.write(this, composer, shouldComposeOwnerName);
     }
 }

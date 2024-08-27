@@ -9,6 +9,8 @@ import Orion.Api.Server.Game.Room.Object.Item.Interaction.IRoomItemInteraction;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Api.Storage.Result.IConnectionResult;
 import Orion.Game.Room.Object.Item.Data.RoomItemData;
+import Orion.Protocol.Message.Composer.Room.Object.UpdateFloorItemComposer;
+import Orion.Protocol.Utils.HexUtils;
 import Orion.Writer.Room.Object.Item.RoomWallItemWriter;
 
 public class RoomWallItem implements IRoomWallItem {
@@ -79,7 +81,34 @@ public class RoomWallItem implements IRoomWallItem {
     }
 
     @Override
+    public void toggleState() {
+        String data = this.getData().getExtraData();
+
+        if (!HexUtils.isNumeric(data)) return;
+
+        int interactionCycleCount = this.getDefinition().getInteractionModesCount();
+
+        if (interactionCycleCount <= 1) return;
+
+        final int cycleValue = data.isEmpty() || data.trim().isEmpty() ? 0 : Integer.parseInt(data);
+
+        this.getData().setExtraData(String.valueOf(
+                (cycleValue + 1) % interactionCycleCount
+        ));
+    }
+
+    @Override
+    public void sendUpdate() {
+        //this.room.broadcastMessage(new UpdateFloorItemComposer(this));
+    }
+
+    @Override
     public void write(IMessageComposer composer) {
-        RoomWallItemWriter.write(this, composer);
+        this.write(composer, false);
+    }
+
+    @Override
+    public void write(final IMessageComposer composer, final boolean shouldComposeOwnerName) {
+        RoomWallItemWriter.write(this, composer, shouldComposeOwnerName);
     }
 }

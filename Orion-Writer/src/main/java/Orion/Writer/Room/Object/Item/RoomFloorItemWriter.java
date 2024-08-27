@@ -4,7 +4,11 @@ import Orion.Api.Networking.Message.IMessageComposer;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 
 public abstract class RoomFloorItemWriter {
-    public static void write(final IRoomFloorItem item, final IMessageComposer composer) {
+    public static void write(
+            final IRoomFloorItem item,
+            final IMessageComposer composer,
+            final boolean shouldComposeOwnerName
+    ) {
         composer.appendInt(item.getVirtualId());
         composer.appendInt(item.getDefinition().getSpriteId());
         composer.appendInt(item.getPosition().getX());
@@ -25,5 +29,9 @@ public abstract class RoomFloorItemWriter {
         composer.appendInt(-1);
         composer.appendInt(2); // Item usable policy
         composer.appendInt(item.getData().getOwnerId());
+
+        if(shouldComposeOwnerName) {
+            composer.appendString(item.getData().getOwnerName());
+        }
     }
 }

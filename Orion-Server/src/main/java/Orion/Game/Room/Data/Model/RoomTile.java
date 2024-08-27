@@ -9,7 +9,6 @@ import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomEntityMovementNode;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomTileStatusType;
 import Orion.Api.Server.Game.Util.Position;
-import io.netty.util.internal.ConcurrentSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +69,10 @@ public class RoomTile implements IRoomTile {
 
         double highestHeight = 0d;
 
+        if(this.topItem == null && !this.floorItems.isEmpty()) {
+            this.topItem = this.floorItems.getFirst();
+        }
+
         for(final IRoomFloorItem item : this.floorItems) {
             if(item.getDefinition() == null) continue;
 
@@ -77,12 +80,12 @@ public class RoomTile implements IRoomTile {
 
             double itemHeight = item.getData().getPosition().getZ() + item.getDefinition().getStackHeight(); // TODO: Check override height
 
-            if(itemHeight > highestHeight) {
+            if(itemHeight >= highestHeight) {
                 highestHeight = itemHeight;
                 this.topItem = item;
             }
 
-            if(!item.getDefinition().isAllowWalk() && this.topItem.getData().getId() == item.getData().getId()) { // TODO: Check gate
+            if(!item.getDefinition().isAllowWalk() && this.topItem != null && this.topItem.getData().getId() == item.getData().getId()) { // TODO: Check gate
                 this.movementNode = RoomEntityMovementNode.CLOSED;
             }
 
@@ -262,6 +265,11 @@ public class RoomTile implements IRoomTile {
     @Override
     public Set<IRoomEntity> getEntities() {
         return this.entities;
+    }
+
+    @Override
+    public List<IRoomFloorItem> getFloorItems() {
+        return this.floorItems;
     }
 
     @Override

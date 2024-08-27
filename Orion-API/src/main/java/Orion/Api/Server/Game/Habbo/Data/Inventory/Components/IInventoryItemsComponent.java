@@ -1,6 +1,7 @@
 package Orion.Api.Server.Game.Habbo.Data.Inventory.Components;
 
 import Orion.Api.Server.Game.Habbo.Data.Inventory.IHabboInventoryItem;
+import Orion.Api.Server.Game.Habbo.IHabbo;
 import Orion.Api.Util.IDisposable;
 
 import java.util.Collection;
@@ -12,4 +13,6 @@ public interface IInventoryItemsComponent extends IDisposable {
     void setItems(ConcurrentHashMap<Long, IHabboInventoryItem> items);
 
     IHabboInventoryItem getItemById(long itemId);
+
+    void removeItem(long itemI);
 }

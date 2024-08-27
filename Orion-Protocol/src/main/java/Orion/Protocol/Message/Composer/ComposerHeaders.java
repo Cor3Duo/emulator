@@ -81,4 +81,11 @@ public abstract class ComposerHeaders {
     public static int InventoryBotsComposer = 3086;
     public static int UpdateTileStackHeightComposer = 558;
     public static int AddFloorItemComposer = 1534;
+    public static int RemoveInventoryItemComposer = 159;
+    public static int PurchaseFailedAlertComposer = 1404;
+    public static int PurchaseUnavailableAlertComposer = 3770;
+    public static int CatalogIndexComposer = 1032;
+    public static int CatalogModeComposer = 3828;
+    public static int CatalogPageComposer = 804;
+    public static int PurchaseOkComposer = 869;
 }

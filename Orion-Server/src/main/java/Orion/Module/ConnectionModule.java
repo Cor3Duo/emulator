@@ -5,6 +5,7 @@ import Orion.Api.Storage.IConnection;
 import Orion.Api.Storage.IConnectionContext;
 import Orion.Api.Storage.Provider.IConnectionProvider;
 import Orion.Api.Storage.Repository.Achievement.IAchievementRepository;
+import Orion.Api.Storage.Repository.Catalog.ICatalogRepository;
 import Orion.Api.Storage.Repository.Emulator.IEmulatorRepository;
 import Orion.Api.Storage.Repository.Habbo.*;
 import Orion.Api.Storage.Repository.Permission.IPermissionRepository;
@@ -13,6 +14,7 @@ import Orion.Storage.ConnectionContext;
 import Orion.Storage.Connector.HikariConnector;
 import Orion.Storage.Provider.ConnectionProvider;
 import Orion.Storage.Repository.Achievement.AchievementRepository;
+import Orion.Storage.Repository.Catalog.CatalogRepository;
 import Orion.Storage.Repository.Emulator.EmulatorRepository;
 import Orion.Storage.Repository.Habbo.*;
 import Orion.Storage.Repository.Permission.PermissionRepository;
@@ -43,5 +45,7 @@ public class ConnectionModule extends AbstractModule {
         bind(IPermissionRepository.class).to(PermissionRepository.class);
 
         bind(IAchievementRepository.class).to(AchievementRepository.class);
+
+        bind(ICatalogRepository.class).to(CatalogRepository.class);
     }
 }
