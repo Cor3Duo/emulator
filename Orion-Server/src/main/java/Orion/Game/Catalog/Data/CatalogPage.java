@@ -2,6 +2,7 @@ package Orion.Game.Catalog.Data;
 
 import Orion.Api.Networking.Message.IMessageComposer;
 import Orion.Api.Server.Game.Catalog.Data.ICatalogPage;
+import Orion.Api.Server.Game.Catalog.ICatalogManager;
 import Orion.Api.Server.Game.Catalog.Items.ICatalogItem;
 import Orion.Api.Server.Game.Catalog.Layouts.ICatalogLayout;
 import Orion.Api.Server.Game.Catalog.Writers.CatalogPageWriter;
@@ -196,7 +197,11 @@ public class CatalogPage implements ICatalogPage {
     }
 
     @Override
-    public void fillPageItems() {
+    public void fillItems(final ICatalogManager catalogManager) {
+        for(final ICatalogItem item : catalogManager.getCatalogItems().values()) {
+            if(item.getPageId() != this.id) continue;
 
+            this.items.putIfAbsent(item.getId(), item);
+        }
     }
 }

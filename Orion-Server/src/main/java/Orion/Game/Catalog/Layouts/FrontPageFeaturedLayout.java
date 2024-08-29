@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import Orion.Api.Server.Game.Catalog.Data.ICatalogPage;
 import Orion.Api.Networking.Message.IMessageComposer;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.Map;
 
@@ -40,11 +41,11 @@ public class FrontPageFeaturedLayout implements ICatalogFrontPage {
 
     @Override
     public void writeFrontPage(final IMessageComposer composer) {
-        final Map<Integer, ICatalogFeaturedPage> featuredPages = this.catalogManager.getCatalogFeaturedPages();
+        final TIntObjectHashMap<ICatalogFeaturedPage> featuredPages = this.catalogManager.getCatalogFeaturedPages();
 
         composer.appendInt(featuredPages.size());
 
-        for (final ICatalogFeaturedPage featuredPage : featuredPages.values()) {
+        for (final ICatalogFeaturedPage featuredPage : featuredPages.valueCollection()) {
             featuredPage.write(composer);
         }
     }

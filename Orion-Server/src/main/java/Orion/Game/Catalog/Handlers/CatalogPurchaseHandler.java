@@ -33,17 +33,20 @@ public class CatalogPurchaseHandler implements ICatalogPurchaseHandler {
         final ICatalogPage page = this.catalogManager.getPageForHabbo(pageId, session.getHabbo());
 
         if(page == null) {
-            session.send(new MiddleAlertComposer(MiddleAlertType.ADMIN_PERSISTENT, "Invalid page."));
+            System.out.println("Não tem página");
+            session.getHabbo().getLogger().warn(STR."Page not found: \{pageId}");
             return;
         }
 
         // TODO: VIP rank from database
         if(page.isVipOnly() && session.getHabbo().getData().getRank() != 2) {
+            session.getHabbo().getLogger().warn(STR."User attempted to purchase item from VIP page: \{page.getId()}");
             session.send(new GenericErrorComposer(GenericErrorType.NEED_TO_VIP));
             return;
         }
 
         if(page.getMinRank() > session.getHabbo().getData().getRank()) {
+            session.getHabbo().getLogger().warn(STR."User attempted to purchase item with insufficient rank: \{page.getMinRank()}");
             session.send(new PurchaseUnavailableAlertComposer(AlertPurchaseUnavailableCode.ILLEGAL_PURCHASE));
             return;
         }
@@ -51,11 +54,13 @@ public class CatalogPurchaseHandler implements ICatalogPurchaseHandler {
         final ICatalogItem item = page.getItemById(itemId);
 
         if(item == null) {
+            session.getHabbo().getLogger().warn(STR."Item not found: \{itemId}");
             session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.SERVER_ERROR));
             return;
         }
 
         if(amount > 1 && !item.isHaveOffer()) {
+            session.getHabbo().getLogger().warn(STR."User attempted to purchase multiple items that don't have an offer: \{item.getId()}");
             session.send(new PurchaseUnavailableAlertComposer(AlertPurchaseUnavailableCode.ILLEGAL_PURCHASE));
             return;
         }
@@ -67,16 +72,19 @@ public class CatalogPurchaseHandler implements ICatalogPurchaseHandler {
         final CurrencyType currencyType = CurrencyType.getFromType(item.getPointsType());
 
         if(currencyType == null && item.getPointsType() != 0) {
+            session.getHabbo().getLogger().warn(STR."Invalid currency type for item: \{item.getId()}");
             session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.SERVER_ERROR));
             return;
         }
 
         if(userCreditsAmount < itemCreditsCost) {
+            session.getHabbo().getLogger().warn(STR."User doesn't have enough credits to purchase item: \{item.getId()}");
             session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.UNKNOWN));
             return;
         }
 
         if(itemPointsCost > 0 && session.getHabbo().getCurrencies().getAmount(currencyType) < itemPointsCost) {
+            session.getHabbo().getLogger().warn(STR."User doesn't have enough points to purchase item: \{item.getId()}");
             session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.UNKNOWN));
             return;
         }
@@ -109,21 +117,38 @@ public class CatalogPurchaseHandler implements ICatalogPurchaseHandler {
             int itemPointsCost,
             String extraData
     ) {
-        final IItemDefinition furniture = item.getItems().getFirst();
+        final IItemDefinition itemDefinition = item.getItems().getFirst();
 
-        if(furniture == null) {
+        if(itemDefinition == null) {
+            session.getHabbo().getLogger().warn(STR."No item definition found for item: \{item.getId()}");
             session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.SERVER_ERROR));
             return;
         }
 
-        final IPurchaseProvider provider = this.catalogManager.getProviders().getProviderByName(furniture.getInteractionType());
+        String providerName = itemDefinition.getInteractionType();
+
+        if(itemDefinition.isDecoration()) {
+            providerName = "room_decoration";
+        }
+
+        if(item.getCatalogName().startsWith("a0 pet")) {
+            providerName = "pet";
+        }
+
+        if(item.getExtraData().equals("r")) {
+            providerName = "bot";
+        }
+
+        if(item.isLimited()) {
+            providerName = "limited_item";
+        }
+
+        providerName = "default";
+
+        IPurchaseProvider provider = this.catalogManager.getProviders().getProviderByName(providerName);
 
         if(provider == null) {
-            session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.SERVER_ERROR));
-            return;
-        }
-
-        if(!provider.isValidAttempt(session, page, item, amount, extraData)) {
+            session.getHabbo().getLogger().warn(STR."No purchase provider found for item: \{itemDefinition.getInteractionType()}");
             session.send(new PurchaseFailedAlertComposer(AlertPurchaseFailedCode.SERVER_ERROR));
             return;
         }

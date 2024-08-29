@@ -2,6 +2,7 @@ package Orion.Api.Server.Game.Catalog.Items;
 
 import Orion.Api.Server.Game.Catalog.Data.Purchase.ICatalogPurchaseItem;
 import Orion.Api.Server.Game.Room.Object.Item.Base.IItemDefinition;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomItemManager;
 import Orion.Api.Util.IFillable;
 import Orion.Api.Util.IWriteable;
 
@@ -40,11 +41,13 @@ public interface ICatalogItem extends IFillable, IWriteable {
 
     boolean isClubOnly();
 
+    boolean isAllowGift();
+
     List<IItemDefinition> getItems();
 
     boolean isLimited();
 
     int compareTo(ICatalogItem item);
 
-    void fillFurnitureItems();
+    void fillItemsDefinition(final IRoomItemManager itemManager);
 }

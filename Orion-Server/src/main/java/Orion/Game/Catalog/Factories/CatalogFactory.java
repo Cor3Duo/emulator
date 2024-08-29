@@ -5,6 +5,7 @@ import Orion.Api.Server.Game.Catalog.Data.ICatalogPage;
 import Orion.Api.Server.Game.Catalog.ICatalogManager;
 import Orion.Api.Server.Game.Catalog.Items.ICatalogFactory;
 import Orion.Api.Server.Game.Catalog.Items.ICatalogItem;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomItemManager;
 import Orion.Api.Storage.Result.IConnectionResult;
 import Orion.Game.Catalog.Data.CatalogFeaturedPage;
 import Orion.Game.Catalog.Data.CatalogPage;
@@ -18,11 +19,14 @@ public class CatalogFactory implements ICatalogFactory {
     @Inject
     private ICatalogManager catalogManager;
 
+    @Inject
+    private IRoomItemManager roomItemManager;
+
     @Override
     public ICatalogPage createCatalogPage(IConnectionResult result) {
         final ICatalogPage catalogPage = new CatalogPage(result);
 
-        catalogPage.fillPageItems();
+        catalogPage.fillItems(this.catalogManager);
         catalogPage.setLayout(this.catalogManager.getLayouts().getByName(catalogPage.getPageLayout()));
 
         if(this.catalogManager.getLayouts().getByName(catalogPage.getPageLayout()) == null) {
@@ -41,7 +45,7 @@ public class CatalogFactory implements ICatalogFactory {
     public ICatalogItem createCatalogItem(final IConnectionResult result) {
         final ICatalogItem catalogItem = new CatalogItem(result);
 
-        catalogItem.fillFurnitureItems();
+        catalogItem.fillItemsDefinition(this.roomItemManager);
 
         return catalogItem;
     }

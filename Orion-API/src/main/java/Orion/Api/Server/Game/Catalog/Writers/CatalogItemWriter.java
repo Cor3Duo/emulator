@@ -16,12 +16,12 @@ public abstract class CatalogItemWriter {
         composer.appendInt(item.getCostCredits());
         composer.appendInt(item.getCostPoints());
         composer.appendInt(item.getPointsType());
-        composer.appendBoolean(false); // CTX: allowGift
+        composer.appendBoolean(item.isAllowGift()); // Check HC and isClubOnly
 
         composer.appendInt(item.getItems().size());
 
         for (final IItemDefinition itemDefinition : item.getItems()) {
-            composer.appendString(itemDefinition.getType().toString().toLowerCase());
+            composer.appendString(itemDefinition.getType().get().toLowerCase());
 
             if(itemDefinition.getType().equals(ItemDefinitionType.BADGE)) {
                 composer.appendString(itemDefinition.getItemName());
@@ -29,7 +29,7 @@ public abstract class CatalogItemWriter {
 
             composer.appendInt(itemDefinition.getSpriteId());
 
-            composer.appendString(getFurnitureExtraData(itemDefinition, item));
+            composer.appendString(getExtraData(itemDefinition, item));
 
             composer.appendInt(item.getAmount());
             composer.appendBoolean(item.isLimited());
@@ -46,7 +46,7 @@ public abstract class CatalogItemWriter {
         composer.appendString(STR."\{item.getCatalogName()}.png");
     }
 
-    public static String getFurnitureExtraData(final IItemDefinition itemDefinition, final ICatalogItem item) {
+    public static String getExtraData(final IItemDefinition itemDefinition, final ICatalogItem item) {
         if(itemDefinition.isDecoration()) {
             return itemDefinition.getItemName().split("_")[2];
         }

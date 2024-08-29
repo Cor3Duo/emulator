@@ -5,7 +5,6 @@ import Orion.Api.Server.Game.Room.Data.Model.IRoomTile;
 import Orion.Api.Server.Game.Room.IRoom;
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
-import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomEntityMovementNode;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomTileStatusType;
 import Orion.Api.Server.Game.Util.Position;
@@ -28,7 +27,7 @@ public class RoomTile implements IRoomTile {
 
     private RoomTileState state;
 
-    private IRoomItem topItem;
+    private IRoomFloorItem topItem;
 
     private final List<IRoomFloorItem> floorItems;
 
@@ -253,7 +252,7 @@ public class RoomTile implements IRoomTile {
     }
 
     @Override
-    public IRoomItem getTopItem() {
+    public IRoomFloorItem getTopItem() {
         return this.topItem;
     }
 

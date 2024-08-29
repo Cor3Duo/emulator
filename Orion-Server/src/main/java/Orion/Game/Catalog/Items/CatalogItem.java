@@ -5,6 +5,7 @@ import Orion.Api.Server.Game.Catalog.Data.Purchase.ICatalogPurchaseItem;
 import Orion.Api.Server.Game.Catalog.Items.ICatalogItem;
 import Orion.Api.Server.Game.Catalog.Writers.CatalogItemWriter;
 import Orion.Api.Server.Game.Room.Object.Item.Base.IItemDefinition;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomItemManager;
 import Orion.Api.Storage.Result.IConnectionResult;
 import Orion.Game.Catalog.Data.Purchase.CatalogPurchaseItem;
 
@@ -132,6 +133,11 @@ public class CatalogItem implements ICatalogItem {
         return this.getLimitedStack() > 0;
     }
 
+    @Override
+    public boolean isAllowGift() {
+        return !this.items.isEmpty() && this.items.getFirst().isAllowGift();
+    }
+
     public int compareTo(final ICatalogItem item) {
         return this.orderNumber - item.getOrderNumber();
     }
@@ -165,20 +171,23 @@ public class CatalogItem implements ICatalogItem {
             final String[] itemData = item.split(":");
 
             if(itemData.length == 1) {
-                this.purchaseItems.add(
-                        new CatalogPurchaseItem(Integer.parseInt(itemData[0]), 1
-                        ));
+                this.purchaseItems.add(new CatalogPurchaseItem(Integer.parseInt(itemData[0]), 1));
 
                 continue;
             }
 
-            this.purchaseItems.add(
-                    new CatalogPurchaseItem(Integer.parseInt(itemData[0]), Integer.parseInt(itemData[1]))
-            );
+            this.purchaseItems.add(new CatalogPurchaseItem(Integer.parseInt(itemData[0]), Integer.parseInt(itemData[1])));
         }
     }
 
-    public void fillFurnitureItems() {
+    @Override
+    public void fillItemsDefinition(final IRoomItemManager itemManager) {
+        for (final ICatalogPurchaseItem purchaseItem : this.purchaseItems) {
+            final IItemDefinition itemDefinition = itemManager.getItemDefinitionById(purchaseItem.getItemId());
 
+            if (itemDefinition == null) continue;
+
+            this.items.add(itemDefinition);
+        }
     }
 }

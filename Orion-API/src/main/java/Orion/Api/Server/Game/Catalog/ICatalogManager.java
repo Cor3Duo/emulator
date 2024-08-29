@@ -7,6 +7,7 @@ import Orion.Api.Server.Game.Catalog.Data.ICatalogPage;
 import Orion.Api.Server.Game.Catalog.Items.ICatalogItem;
 import Orion.Api.Server.Game.Habbo.IHabbo;
 import Orion.Api.Util.Initializable;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public interface ICatalogManager extends Initializable {
 
     ICatalogPage getPageForHabbo(int pageId, IHabbo habbo);
 
-    Map<Integer, ICatalogFeaturedPage> getCatalogFeaturedPages();
+    TIntObjectHashMap<ICatalogFeaturedPage> getCatalogFeaturedPages();
 
     boolean pageContainsItem(int pageId, int itemId);
 }

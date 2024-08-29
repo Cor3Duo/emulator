@@ -12,6 +12,7 @@ import Orion.Api.Storage.Repository.Catalog.ICatalogRepository;
 import Orion.Game.Catalog.Data.Pages.RootCatalogPage;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,12 +41,12 @@ public class CatalogManager implements ICatalogManager {
 
     private final HashMap<Integer, ICatalogPage> catalogPages;
 
-    private final HashMap<Integer, ICatalogFeaturedPage> catalogFeaturedPages;
+    private final TIntObjectHashMap<ICatalogFeaturedPage> catalogFeaturedPages;
 
     public CatalogManager() {
         this.catalogItems = new HashMap<>();
         this.catalogPages = new HashMap<>();
-        this.catalogFeaturedPages = new HashMap<>();
+        this.catalogFeaturedPages = new TIntObjectHashMap<>();
     }
 
     @Override
@@ -65,9 +66,14 @@ public class CatalogManager implements ICatalogManager {
             try {
                 final ICatalogItem catalogItem = catalogFactory.createCatalogItem(result);
 
+                if(catalogItem == null) {
+                    this.logger.error("Error while trying to fetch catalog item {}", result.getInt("id"));
+                    return;
+                }
+
                 catalogItems.put(catalogItem.getId(), catalogItem);
             } catch (Exception e) {
-                logger.error("Error while trying to fetch catalog item {}", result.getInt("id"), e);
+                this.logger.error("Error while trying to fetch catalog item {}", result.getInt("id"), e);
             }
         });
 
@@ -82,6 +88,11 @@ public class CatalogManager implements ICatalogManager {
 
             try {
                 final ICatalogPage catalogPage = catalogFactory.createCatalogPage(result);
+
+                if(catalogPage == null) {
+                    this.logger.error("Error while trying to fetch catalog page [{}]", result.getInt("id"));
+                    return;
+                }
 
                 this.catalogPages.put(catalogPage.getId(), catalogPage);
             } catch (Exception e) {
@@ -107,6 +118,11 @@ public class CatalogManager implements ICatalogManager {
             try {
                 final ICatalogFeaturedPage catalogFeaturedPage = catalogFactory.createCatalogFeaturedPage(result);
 
+                if(catalogFeaturedPage == null) {
+                    this.logger.error("Error while trying to fetch catalog featured page [{}]", result.getInt("id"));
+                    return;
+                }
+
                 this.catalogFeaturedPages.put(catalogFeaturedPage.getSlotId(), catalogFeaturedPage);
             } catch (Exception e) {
                 logger.error("Error while trying to fetch catalog featured page [{}]", result.getInt("id"), e);
@@ -127,7 +143,7 @@ public class CatalogManager implements ICatalogManager {
     }
 
     @Override
-    public Map<Integer, ICatalogFeaturedPage> getCatalogFeaturedPages() {
+    public TIntObjectHashMap<ICatalogFeaturedPage> getCatalogFeaturedPages() {
         return this.catalogFeaturedPages;
     }
 

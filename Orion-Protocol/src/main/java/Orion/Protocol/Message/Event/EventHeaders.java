@@ -59,8 +59,8 @@ public abstract class EventHeaders {
     public static final int RequestPlaceItemEvent = 1258;
 
     // Catalog
-    public static final int RequestBuyItemEvent = 315;
+    public static final int RequestBuyItemEvent = 3492;
     public static final int RequestCatalogIndexEvent = 2529;
     public static final int RequestCatalogModeEvent = 1195;
-    public static final int RequestCatalogPage = 412;
+    public static final int RequestCatalogPageEvent = 412;
 }

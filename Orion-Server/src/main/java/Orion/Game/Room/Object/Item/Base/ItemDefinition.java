@@ -17,6 +17,7 @@ public class ItemDefinition implements IItemDefinition {
     private boolean allowSit;
     private boolean allowLay;
     private boolean allowWalk;
+    private boolean allowGift;
     private boolean allowTrade;
     private boolean allowRecycle;
     private boolean allowMarketplaceSell;
@@ -100,6 +101,11 @@ public class ItemDefinition implements IItemDefinition {
     }
 
     @Override
+    public boolean isAllowGift() {
+        return this.allowGift;
+    }
+
+    @Override
     public boolean isAllowTrade() {
         return this.allowTrade;
     }
@@ -180,6 +186,11 @@ public class ItemDefinition implements IItemDefinition {
                 || this.getItemName().equalsIgnoreCase("poster");
     }
 
+    @Override
+    public boolean shouldAddEffectOnEntity() {
+        return this.getMaleEffect() > 0 || this.getFemaleEffect() > 0;
+    }
+
     public void fill(IConnectionResult data) throws Exception {
         this.id = data.getInt("id");
         this.spriteId = data.getInt("sprite_id");
@@ -192,6 +203,7 @@ public class ItemDefinition implements IItemDefinition {
         this.allowSit = data.getBoolean("allow_sit");
         this.allowLay = data.getBoolean("allow_lay");
         this.allowWalk = data.getBoolean("allow_walk");
+        this.allowGift = data.getBoolean("allow_gift");
         this.allowTrade = data.getBoolean("allow_trade");
         this.allowRecycle = data.getBoolean("allow_recycle");
         this.allowMarketplaceSell = data.getBoolean("allow_marketplace_sell");

@@ -11,13 +11,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class RequestCatalogPage implements IMessageEventHandler {
+public class RequestCatalogPageEvent implements IMessageEventHandler {
     @Inject
     private ICatalogManager catalogManager;
 
     @Override
     public int getId() {
-        return EventHeaders.RequestCatalogPage;
+        return EventHeaders.RequestCatalogPageEvent;
     }
 
     @Override

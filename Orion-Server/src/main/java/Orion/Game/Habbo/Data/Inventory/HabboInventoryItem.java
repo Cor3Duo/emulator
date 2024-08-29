@@ -25,6 +25,20 @@ public class HabboInventoryItem implements IHabboInventoryItem {
         }
     }
 
+    public HabboInventoryItem(
+            int id,
+            int userId,
+            IItemDefinition itemDefinition,
+            String extraData,
+            ILimitedEditionData limitedItemData
+    ) {
+        this.id = id;
+        this.userId = userId;
+        this.itemDefinition = itemDefinition;
+        this.extraData = extraData;
+        this.limitedItemData = limitedItemData;
+    }
+
     @Override
     public long getId() {
         return this.id;

@@ -5,6 +5,7 @@ import Orion.Api.Server.Game.Room.IRoom;
 import Orion.Api.Server.Game.Room.Object.Entity.Enum.RoomEntityStatus;
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Protocol.Message.Composer.Room.Entities.RoomEntityStatusComposer;
 
@@ -95,6 +96,10 @@ public class HabboEntityProcess {
 
             entity.setPosition(new Position(entity.getNextPosition().getX(), entity.getNextPosition().getY(), tile.getPosition().getZ()));
             entity.setNextPosition(null);
+
+            final IRoomFloorItem item = tile.getTopItem();
+
+            // dar efeito caso o top item tenha efeito
 
             tile.onEntityEnter(entity);
         }

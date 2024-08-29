@@ -7,6 +7,8 @@ public enum RoomEntityStatus {
     SIT("sit"),
     LAY("lay"),
     SIGN("sign"),
+    DIP("dip"),
+    SWIMMING("swm"),
 
     ;
 

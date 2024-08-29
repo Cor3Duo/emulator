@@ -28,6 +28,8 @@ public interface IItemDefinition extends IFillable {
 
     boolean isAllowWalk();
 
+    boolean isAllowGift();
+
     boolean isAllowTrade();
 
     boolean isAllowRecycle();
@@ -55,4 +57,6 @@ public interface IItemDefinition extends IFillable {
     Double[] getMultiHeights();
 
     boolean isDecoration();
+
+    boolean shouldAddEffectOnEntity();
 }

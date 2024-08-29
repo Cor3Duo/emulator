@@ -1,6 +1,7 @@
 package Orion.Api.Server.Game.Catalog.Data;
 
 import Orion.Api.Networking.Message.IMessageComposer;
+import Orion.Api.Server.Game.Catalog.ICatalogManager;
 import Orion.Api.Server.Game.Catalog.Items.ICatalogItem;
 import Orion.Api.Server.Game.Catalog.Layouts.ICatalogLayout;
 import Orion.Api.Util.IFillable;
@@ -44,7 +45,7 @@ public interface ICatalogPage extends IFillable {
 
     Map<Integer, ICatalogPage> getChildPages();
 
-    void fillPageItems();
+    void fillItems(final ICatalogManager catalogManager);
 
     String getPageHeadline();
 

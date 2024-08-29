@@ -14,5 +14,7 @@ public interface IInventoryItemsComponent extends IDisposable {
 
     IHabboInventoryItem getItemById(long itemId);
 
+    void addItem(final IHabboInventoryItem item);
+
     void removeItem(long itemI);
 }

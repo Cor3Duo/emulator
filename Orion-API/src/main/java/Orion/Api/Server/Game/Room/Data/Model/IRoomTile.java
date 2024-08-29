@@ -3,7 +3,6 @@ package Orion.Api.Server.Game.Room.Data.Model;
 import Orion.Api.Server.Game.Room.Data.Model.Enum.RoomTileState;
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
-import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomEntityMovementNode;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomTileStatusType;
 import Orion.Api.Server.Game.Util.Position;
@@ -36,7 +35,7 @@ public interface IRoomTile extends IPositionable, Initializable, IDisposable {
 
     RoomTileState getState();
 
-    IRoomItem getTopItem();
+    IRoomFloorItem getTopItem();
 
     Position getRedirectTo();
 

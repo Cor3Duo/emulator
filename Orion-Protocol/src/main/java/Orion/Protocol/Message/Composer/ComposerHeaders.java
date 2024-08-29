@@ -88,4 +88,6 @@ public abstract class ComposerHeaders {
     public static int CatalogModeComposer = 3828;
     public static int CatalogPageComposer = 804;
     public static int PurchaseOkComposer = 869;
+    public static int UnseenItemComposer = 2103;
+    public static int InventoryRefreshComposer = 3151;
 }
