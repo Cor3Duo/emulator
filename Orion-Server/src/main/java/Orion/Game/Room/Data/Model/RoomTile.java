@@ -198,7 +198,7 @@ public class RoomTile implements IRoomTile {
     @Override
     public void onEntityEnter(IRoomEntity entity) {
         if(this.room.getMappingComponent().getDoorTile().getPosition().equals(this.getPosition())) {
-            entity.dispose();
+            entity.leaveRoom();
             return;
         }
 

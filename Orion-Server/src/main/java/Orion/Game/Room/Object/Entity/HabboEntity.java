@@ -266,6 +266,12 @@ public class HabboEntity implements IHabboEntity {
     }
 
     @Override
+    public void leaveRoom() {
+        this.habbo.getSession().send(new GoToHotelViewComposer());
+        this.dispose();
+    }
+
+    @Override
     public void dispose() {
         this.isDisposed = true;
 
@@ -275,7 +281,6 @@ public class HabboEntity implements IHabboEntity {
         this.nextPosition = null;
 
         this.habbo.setEntity(null);
-        this.habbo.getSession().send(new GoToHotelViewComposer());
 
         this.habbo = null;
 

@@ -148,7 +148,7 @@ public class RoomFloorItem implements IRoomFloorItem {
     public void toggleState() {
         String data = this.getData().getExtraData();
 
-        if (!HexUtils.isNumeric(data)) return;
+        if (!data.isEmpty() && !HexUtils.isNumeric(data)) return;
 
         int interactionCycleCount = this.getDefinition().getInteractionModesCount();
 

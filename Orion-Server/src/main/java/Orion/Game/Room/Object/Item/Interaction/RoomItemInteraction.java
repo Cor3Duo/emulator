@@ -1,6 +1,7 @@
 package Orion.Game.Room.Object.Item.Interaction;
 
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
+import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Item.Interaction.IRoomItemInteraction;
 
@@ -85,5 +86,19 @@ public class RoomItemInteraction implements IRoomItemInteraction {
     @Override
     public void onItemAddedToStack(IRoomFloorItem item) {
         // Override this method to add custom logic
+    }
+
+    protected boolean hasInteractionBlocked(IRoomEntity entity) {
+        if(!(entity instanceof IHabboEntity habboEntity)) {
+            return true;
+        }
+
+        return this.hasInteractionBlocked(habboEntity, false);
+    }
+
+    protected boolean hasInteractionBlocked(IHabboEntity habboEntity, boolean isWiredTrigger) {
+        if(isWiredTrigger) return false;
+
+        return habboEntity.isDisposed() || !habboEntity.getRoom().getRightsComponent().hasRights(habboEntity.getHabbo());
     }
 }

@@ -11,7 +11,5 @@ public interface IHabboEntity extends IRoomEntity {
 
     boolean isWalking();
 
-    boolean isDisposed();
-
     void lookAt(final int x, final int y);
 }

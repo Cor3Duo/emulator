@@ -6,6 +6,7 @@ import Orion.Api.Server.Game.Room.Object.Entity.Enum.RoomEntityStatus;
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
+import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomEntityMovementNode;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Protocol.Message.Composer.Room.Entities.RoomEntityStatusComposer;
 

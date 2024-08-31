@@ -5,22 +5,19 @@ import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Game.Room.Object.Item.Composition.InteractionName;
-import Orion.Game.Room.Object.Item.Interaction.RoomItemInteraction;
 
 @InteractionName("bed")
-public class BedFloorItem extends RoomItemInteraction {
-    private final IRoomFloorItem item;
-
+public class BedFloorItem extends DefaultFloorItem {
     public BedFloorItem(final IRoomFloorItem item) {
-        this.item = item;
+        super(item);
     }
 
     @Override
     public void onEntityEnter(IRoomEntity entity) {
         if(!(entity instanceof IHabboEntity habboEntity)) return;
 
-        habboEntity.setHeadRotation(item.getData().getRotation());
-        habboEntity.setBodyRotation(item.getData().getRotation());
+        habboEntity.setHeadRotation(this.item.getData().getRotation());
+        habboEntity.setBodyRotation(this.item.getData().getRotation());
 
         habboEntity.setStatus(RoomEntityStatus.LAY, STR."\{item.getDefinition().getStackHeight()}");
         habboEntity.setNeedsUpdate(true);

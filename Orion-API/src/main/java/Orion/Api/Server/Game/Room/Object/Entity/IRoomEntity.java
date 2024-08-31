@@ -43,4 +43,8 @@ public interface IRoomEntity extends IRoomObject, IWriteable, IStatusable, IDisp
     IEntityWalkComponent getWalkComponent();
 
     IEntityEffectComponent getEffectComponent();
+
+    boolean isDisposed();
+
+    void leaveRoom();
 }

@@ -23,8 +23,10 @@ public class ToggleFloorItemStateEvent implements IMessageEventHandler {
 
         final IRoomFloorItem floorItem = session.getHabbo().getEntity().getRoom().getItemsComponent().getFloorItemByVirtualId(itemId);
 
+        System.out.println("Floor item: " + floorItem);
         if(floorItem == null) return;
 
+        System.out.println("Interagiu");
         floorItem.getInteraction().onInteract(session.getHabbo().getEntity(), state);
     }
 }

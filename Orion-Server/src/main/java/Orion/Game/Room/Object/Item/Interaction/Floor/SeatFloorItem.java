@@ -5,14 +5,11 @@ import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Game.Room.Object.Item.Composition.InteractionName;
-import Orion.Game.Room.Object.Item.Interaction.RoomItemInteraction;
 
 @InteractionName("seat_floor")
-public class SeatFloorItem extends RoomItemInteraction {
-    private final IRoomFloorItem item;
-
+public class SeatFloorItem extends DefaultFloorItem {
     public SeatFloorItem(final IRoomFloorItem item) {
-        this.item = item;
+        super(item);
     }
 
     @Override
