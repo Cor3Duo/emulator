@@ -163,6 +163,8 @@ public class Position {
 
         for(int y = 0; y < length; y++) {
             for(int x = 0; x < width; x++) {
+                if(shouldAddOriginalPosition && x == 0 && y == 0) continue;
+
                 if(rotation == 0 || rotation == 4) {
                     positions.add(new Position(position.getX() + x, position.getY() + y));
                     continue;
@@ -182,9 +184,6 @@ public class Position {
     }
 
     public int getDistanceSquared(Position point) {
-        int dx = this.getX() - point.getX();
-        int dy = this.getY() - point.getY();
-
         return Math.abs(this.x - point.getX()) + Math.abs(this.y - point.getY());
     }
 

@@ -4,6 +4,7 @@ import Orion.Api.Server.Game.Room.Data.Model.Enum.RoomTileState;
 import Orion.Api.Server.Game.Room.Data.Model.IRoomTile;
 import Orion.Api.Server.Game.Room.IRoom;
 import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
+import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomEntityMovementNode;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomTileStatusType;
@@ -43,7 +44,7 @@ public class RoomTile implements IRoomTile {
 
     private final Set<IRoomEntity> entities;
 
-    private Map<Integer, Consumer<IRoomEntity>> pendingEvents;
+    private final Map<Integer, Consumer<IRoomEntity>> pendingEvents;
 
     public RoomTile(final IRoom room, final Position position) {
         this.room = room;
@@ -60,6 +61,7 @@ public class RoomTile implements IRoomTile {
 
         this.canStack = true;
         this.stackHeight = 0d;
+        this.redirectTo = null;
         this.statusType = RoomTileStatusType.NONE;
         this.movementNode = RoomEntityMovementNode.OPEN;
         this.state = modelState == null ? RoomTileState.INVALID : modelState;
@@ -127,11 +129,7 @@ public class RoomTile implements IRoomTile {
             // TODO: Check item override height
         }
 
-        this.stackHeight = highestHeight;
-
-        if(this.originalHeight == 0d) {
-            this.originalHeight = this.stackHeight;
-        }
+        this.stackHeight = highestHeight == 0d ? this.originalHeight : highestHeight;
     }
 
     @Override
@@ -147,10 +145,17 @@ public class RoomTile implements IRoomTile {
         final int lastTopItemId = this.topItem == null ? 0 : this.topItem.getData().getId();
 
         this.floorItems.add(item);
-
         this.initialize();
 
-        if(this.topItem != null && this.topItem.getData().getId() != lastTopItemId) {
+        for (final IRoomFloorItem floorItem : this.floorItems) {
+            if (floorItem.getData().getId() == item.getData().getId()) continue;
+
+            floorItem.getInteraction().onItemAddedToStack(item);
+        }
+
+        if(this.topItem == null) return;
+
+        if(this.topItem.getData().getId() != lastTopItemId) {
             for (final IRoomEntity entity : this.entities) {
                 this.topItem.getInteraction().onEntityEnter(entity);
             }
@@ -175,17 +180,40 @@ public class RoomTile implements IRoomTile {
     public void onEntityLeave(IRoomEntity entity) {
         this.entities.remove(entity);
 
-        if(this.topItem == null) return;
+        if(this.topItem == null) {
+            if(entity.getEffectComponent().hasItemEffect()) {
+                entity.getEffectComponent().removeEffect();
+            }
+
+            return;
+        }
+
+        if(this.topItem.getDefinition().shouldAddEffectOnEntity() && entity.getEffectComponent().hasEffect(this.topItem.getDefinition().getCorrectEffectId(entity), true)) {
+            entity.getEffectComponent().setToBeRemoved(true);
+        }
 
         this.topItem.getInteraction().onEntityLeave(entity);
     }
 
     @Override
     public void onEntityEnter(IRoomEntity entity) {
+        if(this.room.getMappingComponent().getDoorTile().getPosition().equals(this.getPosition())) {
+            entity.dispose();
+            return;
+        }
+
         this.entities.add(entity);
         this.executePendingEvents(entity);
 
         if(this.topItem == null) return;
+
+        if(this.topItem.getDefinition().shouldAddEffectOnEntity()) {
+            if(entity.getEffectComponent().hasEffect(this.topItem.getDefinition().getCorrectEffectId(entity), true)) {
+               entity.getEffectComponent().setToBeRemoved(false);
+            } else {
+                entity.getEffectComponent().setEffect(this.topItem.getDefinition().getCorrectEffectId(entity), 0, this.topItem.getData().getId());
+            }
+        }
 
         this.topItem.getInteraction().onEntityEnter(entity);
     }

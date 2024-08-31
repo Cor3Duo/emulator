@@ -48,8 +48,7 @@ public class JoinRoomHandler implements IJoinRoomHandler {
         if(room == null) return;
 
         if(habbo.getEntity() != null && habbo.getEntity().getRoom() != null) {
-            habbo.getEntity().getRoom().getEntitiesComponent().removeEntity(habbo.getEntity());
-            habbo.setEntity(null);
+            habbo.getEntity().dispose();
         }
 
         if(habbo.hasStatus("room_doorbell")) {
@@ -211,8 +210,7 @@ public class JoinRoomHandler implements IJoinRoomHandler {
         }
 
         if(habbo.getEntity().getRoom().getData().getId() != room.getData().getId()) {
-            habbo.getEntity().getRoom().getEntitiesComponent().removeEntity(habbo.getEntity());
-            habbo.setEntity(null);
+            habbo.getEntity().dispose();
         }
 
         if(habbo.getEntity() == null) {

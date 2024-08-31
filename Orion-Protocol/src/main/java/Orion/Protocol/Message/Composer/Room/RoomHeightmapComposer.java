@@ -8,7 +8,7 @@ public class RoomHeightmapComposer extends MessageComposer {
     public RoomHeightmapComposer(final IRoom room) {
         super(ComposerHeaders.RoomHeightmapComposer);
 
-        appendBoolean(true);
+        appendBoolean(true); // CTX: zoomed in
         appendInt(room.getData().getWallHeight());
         appendString(room.getModel().getData().getRelativeHeightMap());
     }

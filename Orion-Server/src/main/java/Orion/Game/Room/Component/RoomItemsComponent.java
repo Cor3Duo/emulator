@@ -21,9 +21,11 @@ import Orion.Protocol.Message.Composer.Room.Object.AddFloorItemComposer;
 import Orion.Protocol.Message.Composer.Room.Object.UpdateFloorItemComposer;
 import Orion.Protocol.Message.Composer.Room.UpdateTileStackHeightComposer;
 import com.google.inject.Inject;
+import gnu.trove.set.hash.THashSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -103,7 +105,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
         }
 
         final List<Position> affectedPositions = Position.getAffectedPositions(
-                item.getItemDefinition().getLength(), item.getItemDefinition().getWidth(), rotation, targetTile.getPosition(), true
+                item.getItemDefinition().getLength(), item.getItemDefinition().getWidth(), rotation, targetTile.getPosition()
         );
 
         final FurnitureMovementError furnitureMovementError = this.checkItemMovementError(affectedPositions, -1);
@@ -121,11 +123,10 @@ public class RoomItemsComponent implements IRoomItemsComponent {
                     item.getItemDefinition()
             );
 
+            addedFloorItem.setAffectedPositions(affectedPositions);
+
             this.floorItems.putIfAbsent(addedFloorItem.getVirtualId(), addedFloorItem);
             this.ownerNames.putIfAbsent(addedFloorItem.getData().getOwnerId(), addedFloorItem.getData().getOwnerName());
-
-            addedFloorItem.setAffectedPositions(affectedPositions);
-            addedFloorItem.getInteraction().onPlaced();
 
             session.getHabbo().getInventory().getItemsComponent().removeItem(item.getId());
             session.send(new RemoveInventoryItemComposer(item));
@@ -139,18 +140,10 @@ public class RoomItemsComponent implements IRoomItemsComponent {
 
                 affectedTile.addItem(addedFloorItem);
 
-                for (final IRoomItem roomItem : affectedTile.getFloorItems()) {
-                    if(roomItem.getData().getId() == addedFloorItem.getData().getId()) continue;
-
-                    roomItem.getInteraction().onItemAddedToStack(addedFloorItem);
-                }
-
-                for (final IRoomEntity entity : affectedTile.getEntities()) {
-                    addedFloorItem.getInteraction().onEntityEnter(entity);
-                }
-
                 this.room.broadcastMessage(new UpdateTileStackHeightComposer(affectedTile));
             }
+
+            addedFloorItem.getInteraction().onPlaced();
         } catch (Exception error) {
             session.getHabbo().getLogger().error("Error while creating the room floor item", error);
 
@@ -166,11 +159,6 @@ public class RoomItemsComponent implements IRoomItemsComponent {
 
         if(targetTile == null) {
             return FurnitureMovementError.INVALID_MOVE;
-        }
-
-        if(targetTile.getPosition().equals(item.getPosition()) && rotation == item.getData().getRotation()) {
-            System.out.println("position and rotation are the same");
-            return FurnitureMovementError.NONE;
         }
 
         final List<Position> newAffectedPositions = new ArrayList<>() {
@@ -232,7 +220,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
     }
 
     private void moveItemTo(final IRoomFloorItem item, IRoomTile targetTile, int rotation, final List<Position> newAffectedPositions) {
-        final List<IRoomTile> tilesToUpdate = new ArrayList<>();
+        final THashSet<IRoomTile> tilesToUpdate = new THashSet<>();
         for (final Position affectedPosition : item.getAffectedPositions()) {
             final IRoomTile tile = this.room.getMappingComponent().getTile(affectedPosition);
 
@@ -240,7 +228,7 @@ public class RoomItemsComponent implements IRoomItemsComponent {
             tilesToUpdate.add(tile);
         }
 
-        item.getData().setPosition(targetTile.getPosition());
+        item.getData().setPosition(new Position(targetTile.getPosition().getX(), targetTile.getPosition().getY(), targetTile.getStackHeight()));
         item.getData().setRotation(rotation);
         item.setAffectedPositions(newAffectedPositions);
 

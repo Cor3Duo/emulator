@@ -1,5 +1,9 @@
 package Orion.Protocol.Message.Composer;
 
+/**
+ * Revision 2016-11
+ * <a href="https://api.sulek.dev/releases/PRODUCTION-201611291003-338511768/messages">Sulek</a>
+ */
 public abstract class ComposerHeaders {
     public static int PongComposer = 10;
     public static int MachineIDComposer = 1488;
@@ -90,4 +94,5 @@ public abstract class ComposerHeaders {
     public static int PurchaseOkComposer = 869;
     public static int UnseenItemComposer = 2103;
     public static int InventoryRefreshComposer = 3151;
+    public static int RoomEntityEffectComposer = 1167;
 }

@@ -3,11 +3,14 @@ package Orion.Game.Room.Object.Entity;
 import Orion.Api.Networking.Message.IMessageComposer;
 import Orion.Api.Server.Game.Habbo.IHabbo;
 import Orion.Api.Server.Game.Room.IRoom;
+import Orion.Api.Server.Game.Room.Object.Entity.Component.IEntityEffectComponent;
 import Orion.Api.Server.Game.Room.Object.Entity.Component.IEntityWalkComponent;
 import Orion.Api.Server.Game.Room.Object.Entity.Enum.RoomEntityStatus;
 import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Api.Server.Game.Util.Position;
+import Orion.Game.Room.Object.Entity.Component.EntityEffectComponent;
 import Orion.Game.Room.Object.Entity.Component.EntityWalkComponent;
+import Orion.Protocol.Message.Composer.HotelView.GoToHotelViewComposer;
 import Orion.Protocol.Message.Composer.Room.Entities.GiveHandItemComposer;
 import Orion.Writer.Room.Object.Entity.HabboEntityWriter;
 
@@ -39,6 +42,8 @@ public class HabboEntity implements IHabboEntity {
     private int handItemId;
     private int handItemTimer;
 
+    private final IEntityEffectComponent effectComponent;
+
     public HabboEntity(int virtualId, final IHabbo habbo, final IRoom room) {
         this.virtualId = virtualId;
 
@@ -52,6 +57,7 @@ public class HabboEntity implements IHabboEntity {
         this.bodyRotation = room.getModel().getData().getDoorDirection();
 
         this.walkComponent = new EntityWalkComponent(this);
+        this.effectComponent = new EntityEffectComponent(this);
     }
 
     @Override
@@ -245,6 +251,11 @@ public class HabboEntity implements IHabboEntity {
     }
 
     @Override
+    public IEntityEffectComponent getEffectComponent() {
+        return this.effectComponent;
+    }
+
+    @Override
     public void write(IMessageComposer composer) {
         HabboEntityWriter.write(this, composer);
     }
@@ -263,7 +274,11 @@ public class HabboEntity implements IHabboEntity {
         this.position = null;
         this.nextPosition = null;
 
+        this.habbo.setEntity(null);
+        this.habbo.getSession().send(new GoToHotelViewComposer());
+
         this.habbo = null;
+
         this.status.clear();
     }
 }

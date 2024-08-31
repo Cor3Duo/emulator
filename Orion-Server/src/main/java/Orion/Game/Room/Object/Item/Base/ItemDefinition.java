@@ -1,5 +1,7 @@
 package Orion.Game.Room.Object.Item.Base;
 
+import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
+import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Api.Server.Game.Room.Object.Item.Base.IItemDefinition;
 import Orion.Api.Server.Game.Room.Object.Item.ItemDefinitionType;
 import Orion.Api.Storage.Result.IConnectionResult;
@@ -189,6 +191,17 @@ public class ItemDefinition implements IItemDefinition {
     @Override
     public boolean shouldAddEffectOnEntity() {
         return this.getMaleEffect() > 0 || this.getFemaleEffect() > 0;
+    }
+
+    @Override
+    public int getCorrectEffectId(final IRoomEntity entity) {
+        if(!(entity instanceof IHabboEntity habboEntity)) return this.maleEffect; // TODO: Fix this
+
+        if(habboEntity.getHabbo().getData().getGender().equalsIgnoreCase(("M"))) {
+            return this.maleEffect;
+        }
+
+        return this.femaleEffect;
     }
 
     public void fill(IConnectionResult data) throws Exception {

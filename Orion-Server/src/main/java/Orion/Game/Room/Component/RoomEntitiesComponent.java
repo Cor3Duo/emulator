@@ -85,11 +85,11 @@ public class RoomEntitiesComponent implements IRoomEntitiesComponent {
     public void removeEntity(final IRoomEntity entity) {
         this.roomEntities.remove(entity.getVirtualId());
 
+        this.room.onEntityRemoved(entity);
+
         if(entity instanceof IHabboEntity) {
             this.habboEntities.remove(entity.getVirtualId());
         }
-
-        this.room.onEntityRemoved(entity);
     }
 
     @Override

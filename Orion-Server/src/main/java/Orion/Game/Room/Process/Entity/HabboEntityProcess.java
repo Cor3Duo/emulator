@@ -48,6 +48,7 @@ public class HabboEntityProcess {
             }
 
             entity.tickHandItem();
+            entity.getEffectComponent().process();
 
             if(entity.needsUpdate()) {
                 entity.setNeedsUpdate(false);
@@ -94,12 +95,8 @@ public class HabboEntityProcess {
 
             if(tile == null) continue;
 
-            entity.setPosition(new Position(entity.getNextPosition().getX(), entity.getNextPosition().getY(), tile.getPosition().getZ()));
+            entity.setPosition(new Position(entity.getNextPosition().getX(), entity.getNextPosition().getY(), tile.getWalkHeight()));
             entity.setNextPosition(null);
-
-            final IRoomFloorItem item = tile.getTopItem();
-
-            // dar efeito caso o top item tenha efeito
 
             tile.onEntityEnter(entity);
         }
@@ -116,7 +113,7 @@ public class HabboEntityProcess {
         entity.setBodyRotation(Position.calculateRotation(entity.getPosition(), nextPosition, false));
         entity.setHeadRotation(entity.getBodyRotation());
 
-        entity.setStatus(RoomEntityStatus.MOVE, STR."\{nextPosition.getX()},\{nextPosition.getY()},\{nextTile.getPosition().getZ()}");
+        entity.setStatus(RoomEntityStatus.MOVE, STR."\{nextPosition.getX()},\{nextPosition.getY()},\{nextTile.getWalkHeight()}");
 
         entity.removeStatus(RoomEntityStatus.LAY);
         entity.removeStatus(RoomEntityStatus.SIT);

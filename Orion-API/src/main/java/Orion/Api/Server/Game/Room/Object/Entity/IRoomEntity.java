@@ -1,5 +1,8 @@
 package Orion.Api.Server.Game.Room.Object.Entity;
 
+import Orion.Api.Server.Game.Room.Object.Entity.Component.IEntityEffectComponent;
+import Orion.Api.Server.Game.Room.Object.Entity.Component.IEntityWalkComponent;
+import Orion.Api.Server.Game.Room.Object.Entity.Data.IEntityEffect;
 import Orion.Api.Server.Game.Room.Object.IRoomObject;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Api.Util.IDisposable;
@@ -36,4 +39,8 @@ public interface IRoomEntity extends IRoomObject, IWriteable, IStatusable, IDisp
     void giveHandItem(int handItemId, int timer);
 
     void tickHandItem();
+
+    IEntityWalkComponent getWalkComponent();
+
+    IEntityEffectComponent getEffectComponent();
 }

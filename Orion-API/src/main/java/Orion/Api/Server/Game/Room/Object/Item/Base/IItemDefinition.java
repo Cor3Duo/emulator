@@ -1,5 +1,7 @@
 package Orion.Api.Server.Game.Room.Object.Item.Base;
 
+import Orion.Api.Server.Game.Habbo.IHabbo;
+import Orion.Api.Server.Game.Room.Object.Entity.IRoomEntity;
 import Orion.Api.Server.Game.Room.Object.Item.ItemDefinitionType;
 import Orion.Api.Util.IFillable;
 
@@ -59,4 +61,6 @@ public interface IItemDefinition extends IFillable {
     boolean isDecoration();
 
     boolean shouldAddEffectOnEntity();
+
+    int getCorrectEffectId(final IRoomEntity entity);
 }
