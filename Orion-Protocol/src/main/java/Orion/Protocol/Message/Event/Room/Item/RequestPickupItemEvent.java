@@ -37,16 +37,6 @@ public class RequestPickupItemEvent implements IMessageEventHandler {
 
         if (item == null) return;
 
-        room.getItemsComponent().removeFloorItem(item);
-        session.getHabbo().getInventory().getItemsComponent().addItem(item);
-
-        final THashSet<IRoomTile> affectedTiles = room.getMappingComponent().getItemAffectedTiles(item);
-
-        session.send(
-                new RoomItemRemoveComposer(item),
-                new InventoryRefreshComposer(),
-                new UnseenItemComposer(UnseenItemCategory.OwnedItem, item.getData().getId()),
-                new UpdateTileStackHeightComposer(affectedTiles)
-        );
+        room.getItemsComponent().removeFloorItem(session, item);
     }
 }
