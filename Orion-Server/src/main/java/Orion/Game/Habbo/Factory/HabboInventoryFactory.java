@@ -39,10 +39,15 @@ public class HabboInventoryFactory implements IHabboInventoryFactory {
                 new InventoryBotsComponent()
         );
     }
+
     @Override
     public void loadAllHabboInventory(final IHabbo habbo) {
+        if(habbo.getInventory().hasInventoryLoaded()) return;
+
         this.loadHabboItems(habbo);
         this.loadHabboBots(habbo);
+
+        habbo.getInventory().setInventoryLoaded();
     }
 
     private void loadHabboItems(final IHabbo habbo) {

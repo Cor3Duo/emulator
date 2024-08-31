@@ -15,6 +15,10 @@ public interface IRoomItemsComponent extends Initializable {
 
     ConcurrentHashMap<Integer, IRoomFloorItem> getFloorItems();
 
+    void removeFloorItem(final ISession session, final IRoomFloorItem item);
+
+    void justRemoveFloorItem(final IRoomFloorItem item);
+
     IRoomFloorItem getFloorItemByVirtualId(int virtualId);
 
     ConcurrentHashMap<Integer, String> getOwnerNames();

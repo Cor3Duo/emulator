@@ -4,6 +4,7 @@ import Orion.Api.Networking.Message.IMessageComposer;
 import Orion.Api.Server.Game.Habbo.Data.Inventory.IHabboInventoryItem;
 import Orion.Api.Server.Game.Room.Object.Item.Base.IItemDefinition;
 import Orion.Api.Server.Game.Room.Object.Item.Data.ILimitedEditionData;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
 import Orion.Api.Storage.Result.IConnectionResult;
 import Orion.Game.Room.Object.Item.Data.LimitedEditionData;
 import Orion.Writer.Habbo.Inventory.HabboInventoryItemWriter;
@@ -37,6 +38,14 @@ public class HabboInventoryItem implements IHabboInventoryItem {
         this.itemDefinition = itemDefinition;
         this.extraData = extraData;
         this.limitedItemData = limitedItemData;
+    }
+
+    public HabboInventoryItem(IRoomItem item) {
+        this.id = item.getData().getId();
+        this.userId = item.getData().getOwnerId();
+        this.itemDefinition = item.getDefinition();
+        this.extraData = item.getData().getExtraData();
+        this.limitedItemData = item.getData().getLimitedData();
     }
 
     @Override

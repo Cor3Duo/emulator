@@ -12,12 +12,16 @@ import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
 import Orion.Api.Server.Game.Room.Object.Item.IRoomWallItem;
 import Orion.Api.Server.Game.Room.Object.Item.ItemDefinitionType;
+import Orion.Api.Server.Game.Util.Inventory.UnseenItemCategory;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Api.Storage.Repository.Room.IRoomItemsRepository;
 import Orion.Game.Room.Object.Item.Data.RoomItemData;
 import Orion.Game.Room.Object.Item.Factory.RoomItemFactory;
+import Orion.Protocol.Message.Composer.Habbo.Inventory.InventoryRefreshComposer;
 import Orion.Protocol.Message.Composer.Habbo.Inventory.RemoveInventoryItemComposer;
+import Orion.Protocol.Message.Composer.Habbo.Inventory.UnseenItemComposer;
 import Orion.Protocol.Message.Composer.Room.Object.AddFloorItemComposer;
+import Orion.Protocol.Message.Composer.Room.Object.RoomItemRemoveComposer;
 import Orion.Protocol.Message.Composer.Room.Object.UpdateFloorItemComposer;
 import Orion.Protocol.Message.Composer.Room.UpdateTileStackHeightComposer;
 import com.google.inject.Inject;
@@ -69,6 +73,31 @@ public class RoomItemsComponent implements IRoomItemsComponent {
     @Override
     public ConcurrentHashMap<Integer, IRoomFloorItem> getFloorItems() {
         return this.floorItems;
+    }
+
+    @Override
+    public void removeFloorItem(final ISession session, IRoomFloorItem item) {
+        session.getHabbo().getInventory().getItemsComponent().addItem(item);
+
+        final THashSet<IRoomTile> affectedTiles = room.getMappingComponent().getItemAffectedTiles(item);
+
+        for (final IRoomTile tile : affectedTiles) {
+            tile.removeItem(item);
+        }
+
+        // TODO: Save the item to the database
+
+        session.send(
+                new RoomItemRemoveComposer(item),
+                new InventoryRefreshComposer(),
+                new UnseenItemComposer(UnseenItemCategory.OwnedItem, item.getData().getId()),
+                new UpdateTileStackHeightComposer(affectedTiles)
+        );
+    }
+
+    @Override
+    public void justRemoveFloorItem(final IRoomFloorItem item) {
+        this.floorItems.remove(item.getVirtualId());
     }
 
     @Override

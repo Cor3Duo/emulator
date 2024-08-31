@@ -12,7 +12,7 @@ public class RoomItemData implements IRoomItemData {
 
     private int ownerId;
 
-    private int itemId;
+    private int itemDefinitionId;
 
     private Position position;
 
@@ -46,7 +46,7 @@ public class RoomItemData implements IRoomItemData {
     ) {
         this.id = (int) item.getId();
         this.ownerId = habbo.getData().getId();
-        this.itemId = item.getItemDefinition().getId();
+        this.itemDefinitionId = item.getItemDefinition().getId();
         this.position = position;
         this.rotation = rotation;
         this.wallPosition = "";
@@ -68,8 +68,8 @@ public class RoomItemData implements IRoomItemData {
     }
 
     @Override
-    public int getItemId() {
-        return this.itemId;
+    public int getDefinitionId() {
+        return this.itemDefinitionId;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class RoomItemData implements IRoomItemData {
     public void fill(final IConnectionResult data) throws Exception {
         this.id = data.getInt("id");
         this.ownerId = data.getInt("user_id");
-        this.itemId = data.getInt("item_id");
+        this.itemDefinitionId = data.getInt("item_id");
         this.wallPosition = data.getString("wall_pos");
         this.rotation = data.getInt("rot");
         this.extraData = data.getString("extra_data");

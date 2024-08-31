@@ -164,7 +164,9 @@ public class RoomTile implements IRoomTile {
 
     @Override
     public void removeItem(IRoomFloorItem item) {
-        if(this.topItem != null && this.topItem.getData().getId() == item.getData().getId()) {
+        final boolean isTopItem = this.topItem != null && this.topItem.getData().getId() == item.getData().getId();
+
+        if(isTopItem) {
             for (final IRoomEntity entity : this.entities) {
                 this.topItem.getInteraction().onEntityLeave(entity);
             }
@@ -174,6 +176,13 @@ public class RoomTile implements IRoomTile {
 
         this.floorItems.remove(item);
         this.initialize();
+
+        if(!isTopItem) return;
+
+        for (final IRoomEntity entity : this.entities) {
+            entity.getPosition().setZ(this.getWalkHeight());
+            entity.setNeedsUpdate(true);
+        }
     }
 
     @Override

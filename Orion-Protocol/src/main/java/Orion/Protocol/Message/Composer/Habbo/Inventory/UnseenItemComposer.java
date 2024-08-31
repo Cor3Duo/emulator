@@ -18,4 +18,13 @@ public class UnseenItemComposer extends MessageComposer {
             appendInt(unseenItemId);
         }
     }
+
+    public UnseenItemComposer(UnseenItemCategory category, int unseenItemId) {
+        super(ComposerHeaders.UnseenItemComposer);
+
+        appendInt(1);
+        appendInt(category.ordinal());
+        appendInt(1);
+        appendInt(unseenItemId);
+    }
 }

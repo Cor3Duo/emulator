@@ -25,7 +25,7 @@ public class Position {
 
     private final int x;
     private final int y;
-    private final double z;
+    private double z;
 
     public Position(int x, int y, double z) {
         this.x = x;
@@ -225,5 +225,9 @@ public class Position {
 
     public double getZ() {
         return this.z;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
     }
 }
