@@ -9,6 +9,8 @@ public class HabboInventory implements IHabboInventory {
 
     private final IInventoryBotsComponent botsComponent;
 
+    private boolean hasInventoryLoaded = false;
+
     public HabboInventory(
             final IInventoryItemsComponent itemsComponent,
             final IInventoryBotsComponent botsComponent
@@ -25,6 +27,16 @@ public class HabboInventory implements IHabboInventory {
     @Override
     public IInventoryBotsComponent getBotsComponent() {
         return this.botsComponent;
+    }
+
+    @Override
+    public boolean hasInventoryLoaded() {
+        return this.hasInventoryLoaded;
+    }
+
+    @Override
+    public void setInventoryLoaded() {
+        this.hasInventoryLoaded = true;
     }
 
     @Override

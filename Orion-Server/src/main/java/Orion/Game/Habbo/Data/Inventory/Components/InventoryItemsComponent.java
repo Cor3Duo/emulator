@@ -3,6 +3,10 @@ package Orion.Game.Habbo.Data.Inventory.Components;
 import Orion.Api.Server.Game.Habbo.Data.Inventory.Components.IInventoryItemsComponent;
 import Orion.Api.Server.Game.Habbo.Data.Inventory.IHabboInventoryItem;
 import Orion.Api.Server.Game.Habbo.IHabbo;
+import Orion.Api.Server.Game.Room.Object.Item.Base.IItemDefinition;
+import Orion.Api.Server.Game.Room.Object.Item.Data.ILimitedEditionData;
+import Orion.Api.Server.Game.Room.Object.Item.IRoomItem;
+import Orion.Game.Habbo.Data.Inventory.HabboInventoryItem;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,8 +41,20 @@ public class InventoryItemsComponent implements IInventoryItemsComponent {
     }
 
     @Override
+    public void addItem(IRoomItem item) {
+        final IHabboInventoryItem inventoryItem = new HabboInventoryItem(item);
+
+        this.items.putIfAbsent(inventoryItem.getId(), inventoryItem);
+        System.out.println("Added" + inventoryItem.getId());
+        System.out.println(this.items.size());
+    }
+
+    @Override
     public void removeItem(long itemId) {
         this.items.remove(itemId);
+
+        System.out.println("Removed" + itemId);
+        System.out.println(this.items.size());
     }
 
     @Override

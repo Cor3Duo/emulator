@@ -72,6 +72,11 @@ public class RoomItemsComponent implements IRoomItemsComponent {
     }
 
     @Override
+    public void removeFloorItem(IRoomFloorItem item) {
+        this.floorItems.remove(item.getVirtualId());
+    }
+
+    @Override
     public IRoomFloorItem getFloorItemByVirtualId(int virtualId) {
         return this.floorItems.get(virtualId);
     }

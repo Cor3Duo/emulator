@@ -9,6 +9,7 @@ import Orion.Api.Server.Game.Room.Object.Item.IRoomFloorItem;
 import Orion.Api.Server.Game.Room.Object.Pathfinder.RoomEntityMovementNode;
 import Orion.Api.Server.Game.Util.Position;
 import Orion.Game.Room.Data.Model.RoomTile;
+import gnu.trove.set.hash.THashSet;
 
 import java.util.List;
 
@@ -64,6 +65,21 @@ public class RoomMappingComponent implements IRoomMappingComponent {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public THashSet<IRoomTile> getItemAffectedTiles(final IRoomFloorItem item) {
+        final THashSet<IRoomTile> tiles = new THashSet<>();
+
+        for (final Position position : item.getAffectedPositions()) {
+            final IRoomTile tile = this.getTile(position);
+
+            if(tile == null) continue;
+
+            tiles.add(tile);
+        }
+
+        return tiles;
     }
 
     @Override

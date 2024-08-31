@@ -95,4 +95,5 @@ public abstract class ComposerHeaders {
     public static int UnseenItemComposer = 2103;
     public static int InventoryRefreshComposer = 3151;
     public static int RoomEntityEffectComposer = 1167;
+    public static int RoomItemRemoveComposer = 2703;
 }
