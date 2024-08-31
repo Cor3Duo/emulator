@@ -87,11 +87,14 @@ public class RoomItemsComponent implements IRoomItemsComponent {
 
         // TODO: Save the item to the database
 
-        session.send(
+        this.room.broadcastMessages(
                 new RoomItemRemoveComposer(item),
-                new InventoryRefreshComposer(),
-                new UnseenItemComposer(UnseenItemCategory.OwnedItem, item.getData().getId()),
                 new UpdateTileStackHeightComposer(affectedTiles)
+        );
+
+        session.send(
+                new InventoryRefreshComposer(),
+                new UnseenItemComposer(UnseenItemCategory.OwnedItem, item.getData().getId())
         );
     }
 
