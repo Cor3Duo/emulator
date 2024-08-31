@@ -41,7 +41,7 @@ public class HabboInventoryItem implements IHabboInventoryItem {
     }
 
     public HabboInventoryItem(IRoomItem item) {
-        this.id = item.getData().getItemId();
+        this.id = item.getData().getId();
         this.userId = item.getData().getOwnerId();
         this.itemDefinition = item.getDefinition();
         this.extraData = item.getData().getExtraData();

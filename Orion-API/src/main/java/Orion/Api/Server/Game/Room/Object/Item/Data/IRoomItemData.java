@@ -8,7 +8,7 @@ public interface IRoomItemData extends IFillable {
 
     int getOwnerId();
 
-    int getItemId();
+    int getDefinitionId();
 
     Position getPosition();
 

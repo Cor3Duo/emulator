@@ -45,16 +45,11 @@ public class InventoryItemsComponent implements IInventoryItemsComponent {
         final IHabboInventoryItem inventoryItem = new HabboInventoryItem(item);
 
         this.items.putIfAbsent(inventoryItem.getId(), inventoryItem);
-        System.out.println("Added" + inventoryItem.getId());
-        System.out.println(this.items.size());
     }
 
     @Override
     public void removeItem(long itemId) {
         this.items.remove(itemId);
-
-        System.out.println("Removed" + itemId);
-        System.out.println(this.items.size());
     }
 
     @Override

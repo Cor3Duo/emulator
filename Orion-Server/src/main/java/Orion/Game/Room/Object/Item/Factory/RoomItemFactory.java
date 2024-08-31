@@ -55,7 +55,7 @@ public class RoomItemFactory implements Initializable {
 
     public IRoomItem create(int virtualId, final IRoomItemData data, final IRoom room) {
         try {
-            final IItemDefinition definition = this.itemManager.getItemDefinitionById(data.getItemId());
+            final IItemDefinition definition = this.itemManager.getItemDefinitionById(data.getDefinitionId());
 
             if(definition == null) return null;
 
