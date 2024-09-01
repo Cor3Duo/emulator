@@ -46,6 +46,8 @@ public interface IRoom extends Comparable<IRoom>, IWriteable, Initializable, IDi
 
     boolean isMuted();
 
+    void setIsMuted(final boolean isMuted);
+
     boolean isInactive();
 
     void checkInactivity();

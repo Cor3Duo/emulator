@@ -3,9 +3,11 @@ package Orion.Protocol.Message.Event.Room.Settings;
 import Orion.Api.Networking.Message.IMessageEvent;
 import Orion.Api.Networking.Session.ISession;
 import Orion.Api.Protocol.Message.IMessageEventHandler;
+import Orion.Api.Server.Game.Habbo.IHabbo;
 import Orion.Api.Server.Game.Room.Data.IRoomData;
 import Orion.Api.Server.Game.Room.Enums.RoomAccessState;
 import Orion.Api.Server.Game.Room.IRoom;
+import Orion.Api.Server.Game.Room.Object.Entity.Type.IHabboEntity;
 import Orion.Protocol.Message.Composer.Room.Settings.RoomSettingsSaveComposer;
 import Orion.Protocol.Message.Composer.Room.Settings.RoomSettingsUpdatedComposer;
 import Orion.Protocol.Message.Composer.Room.Settings.RoomVisualizationSettingsComposer;
@@ -42,8 +44,9 @@ public class RoomSettingsSaveEvent implements IMessageEventHandler {
         roomData.setCategoryId(event.readInt());
 
         int tagsCount = event.readInt();
+        roomData.getTags().clear();
         for (int i = 0; i < tagsCount; i++) {
-            event.readString();
+            roomData.addTag(event.readString());
         }
 
         roomData.setTradeMode(event.readInt());
@@ -66,9 +69,9 @@ public class RoomSettingsSaveEvent implements IMessageEventHandler {
 
         boolean needUpdate = lastWallState != roomData.isHideWall() || lastWallThickness != roomData.getWallThickness() || lastFloorThickness != roomData.getFloorThickness();
         if (needUpdate) {
-            session.send(new RoomVisualizationSettingsComposer(room));
+            room.broadcastMessages(new RoomVisualizationSettingsComposer(room));
         }
 
-        session.send(new RoomSettingsUpdatedComposer(room));
+        room.broadcastMessage(new RoomSettingsUpdatedComposer(room));
     }
 }

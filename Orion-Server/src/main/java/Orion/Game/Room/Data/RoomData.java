@@ -5,6 +5,7 @@ import Orion.Api.Server.Game.Room.Enums.RoomAccessState;
 import Orion.Api.Server.Game.Room.Enums.RoomDiagonalType;
 import Orion.Api.Storage.Result.IConnectionResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -318,6 +319,10 @@ public class RoomData implements IRoomData {
         this.chatProtection = chatProtection;
     }
 
+    public void addTag(final String tag) {
+        this.tags.add(tag);
+    }
+
     @Override
     public void fill(IConnectionResult result) throws Exception {
         this.id = result.getInt("id");
@@ -339,7 +344,7 @@ public class RoomData implements IRoomData {
         this.wallHeight = result.getInt("wall_height");
         this.floorThickness = result.getInt("thickness_floor");
         this.moodlightData = result.getString("moodlight_data");
-        this.tags = Arrays.asList(result.getString("tags").split(";"));
+        this.tags = new ArrayList<>(Arrays.asList(result.getString("tags").split(";")));
         this.isPublic = result.getBoolean("is_public");
         this.isStaffPicked = result.getBoolean("is_staff_picked");
         this.allowPets = result.getBoolean("allow_other_pets");

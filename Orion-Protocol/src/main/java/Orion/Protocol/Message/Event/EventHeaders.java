@@ -62,6 +62,7 @@ public abstract class EventHeaders {
     public static final int RequestRoomRightsListEvent = 3385;
     public static final int RoomBannedListEvent = 2267;
     public static final int RoomSettingsSaveEvent = 1969;
+    public static final int RequestRoomMuteEvent = 3637;
 
     // Catalog
     public static final int RequestBuyItemEvent = 3492;

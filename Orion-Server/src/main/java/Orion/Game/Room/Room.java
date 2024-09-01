@@ -134,6 +134,11 @@ public class Room implements IRoom {
     }
 
     @Override
+    public void setIsMuted(final boolean isMuted) {
+        this.isMuted = isMuted;
+    }
+
+    @Override
     public boolean isInactive() {
         return this.getEntitiesComponent().getHabboEntities().isEmpty();
     }

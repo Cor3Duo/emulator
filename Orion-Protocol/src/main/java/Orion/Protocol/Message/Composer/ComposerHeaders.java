@@ -101,4 +101,6 @@ public abstract class ComposerHeaders {
     public static int RoomSettingsSaveComposer = 948;
     public static int RoomSettingsUpdatedComposer = 3297;
     public static int RoomVisualizationSettingsComposer = 3547;
+    public static int RoomMuteAllComposer = 2533;
+    public static int HabboWhisperComposer = 2704;
 }
