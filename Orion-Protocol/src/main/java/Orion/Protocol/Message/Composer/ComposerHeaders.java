@@ -96,4 +96,9 @@ public abstract class ComposerHeaders {
     public static int InventoryRefreshComposer = 3151;
     public static int RoomEntityEffectComposer = 1167;
     public static int RoomItemRemoveComposer = 2703;
+    public static int RoomSettingsDataComposer = 1498;
+    public static int RoomBannedListComposer = 1869;
+    public static int RoomSettingsSaveComposer = 948;
+    public static int RoomSettingsUpdatedComposer = 3297;
+    public static int RoomVisualizationSettingsComposer = 3547;
 }

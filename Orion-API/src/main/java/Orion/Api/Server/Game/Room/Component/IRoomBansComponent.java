@@ -8,5 +8,7 @@ import java.util.List;
 public interface IRoomBansComponent {
     void setBans(List<IRoomBan> bans);
 
+    List<IRoomBan> getBans();
+
     boolean habboIsBanned(IHabbo habbo);
 }

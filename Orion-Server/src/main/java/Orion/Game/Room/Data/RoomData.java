@@ -234,6 +234,50 @@ public class RoomData implements IRoomData {
         return this.isForSale;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public void setAccessState(final RoomAccessState state) {
+        this.state = state;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    public void setMaxUsers(final int maxUsers) {
+        this.maxUsers = maxUsers;
+    }
+
+    public void setCategoryId(final int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setTradeMode(final int tradeMode) {
+        this.tradeMode = tradeMode;
+    }
+
+    public void setAllowPets(final boolean allowPets) {
+        this.allowPets = allowPets;
+    }
+
+    public void setAllowPetsEat(final boolean allowPetsEat) {
+        this.allowPetsEat = allowPetsEat;
+    }
+
+    public void setAllowWalkthrough(final boolean allowWalkthrough) {
+        this.allowWalkthrough = allowWalkthrough;
+    }
+
+    public void setHideWall(final boolean hideWall) {
+        this.hideWall = hideWall;
+    }
+
     @Override
     public void fill(IConnectionResult result) throws Exception {
         this.id = result.getInt("id");

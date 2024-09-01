@@ -92,4 +92,26 @@ public interface IRoomData extends IFillable {
     boolean isOverrideModel();
 
     boolean isHideWireds();
+
+    void setName(final String name);
+
+    void setDescription(final String description);
+
+    void setAccessState(final RoomAccessState state);
+
+    void setPassword(final String password);
+
+    void setMaxUsers(final int maxUsers);
+
+    void setCategoryId(final int categoryId);
+
+    void setTradeMode(final int tradeMode);
+
+    void setAllowPets(final boolean allowPets);
+
+    void setAllowPetsEat(final boolean allowPetsEat);
+
+    void setAllowWalkthrough(final boolean allowWalkthrough);
+
+    void setHideWall(final boolean hideWall);
 }

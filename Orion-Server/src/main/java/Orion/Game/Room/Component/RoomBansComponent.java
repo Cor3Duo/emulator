@@ -22,6 +22,11 @@ public class RoomBansComponent implements IRoomBansComponent {
     }
 
     @Override
+    public List<IRoomBan> getBans() {
+        return this.bans;
+    }
+
+    @Override
     public boolean habboIsBanned(IHabbo habbo) {
         return this.bans.stream().anyMatch(ban -> ban.getUserId() == habbo.getData().getId() && ban.getEndTimestamp() > TimeUtil.now());
     }

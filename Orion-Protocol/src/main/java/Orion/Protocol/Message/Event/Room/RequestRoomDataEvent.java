@@ -36,6 +36,6 @@ public class RequestRoomDataEvent implements IMessageEventHandler {
 
         final boolean shouldEnterRoom = enterRoom == 1 && forwardRoom == 0;
 
-        session.send(new RoomDataComposer(session.getHabbo(), room, true, shouldEnterRoom));
+        session.send(new RoomDataComposer(session.getHabbo(), room, forwardRoom == 1, shouldEnterRoom));
     }
 }
