@@ -9,7 +9,7 @@ public class RoomThicknessComposer extends MessageComposer {
         super(ComposerHeaders.RoomThicknessComposer);
 
         appendBoolean(room.getData().isHideWall());
-        appendInt(room.getData().getThicknessWall());
-        appendInt(room.getData().getThicknessFloor());
+        appendInt(room.getData().getWallThickness());
+        appendInt(room.getData().getFloorThickness());
     }
 }

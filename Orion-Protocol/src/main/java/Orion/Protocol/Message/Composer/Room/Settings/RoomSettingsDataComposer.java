@@ -33,8 +33,8 @@ public class RoomSettingsDataComposer extends MessageComposer {
         appendInt(roomData.allowPetsEat() ? 1 : 0);
         appendInt(roomData.allowWalkthrough() ? 1 : 0);
         appendInt(roomData.isHideWall() ? 1 : 0);
-        appendInt(roomData.getThicknessWall());
-        appendInt(roomData.getThicknessFloor());
+        appendInt(roomData.getWallThickness());
+        appendInt(roomData.getFloorThickness());
 
         // Chat Settings
         appendInt(roomData.getChatMode());
