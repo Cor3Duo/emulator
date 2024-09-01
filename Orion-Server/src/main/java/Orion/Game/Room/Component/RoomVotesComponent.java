@@ -17,4 +17,16 @@ public class RoomVotesComponent implements IRoomVotesComponent {
     public boolean habboHasVote(IHabbo habbo) {
         return this.votes.contains(habbo.getData().getId());
     }
+
+    @Override
+    public void removeHabboVote(IHabbo habbo) {
+        this.votes.remove(habbo.getData().getId());
+    }
+
+    @Override
+    public void addHabboVote(IHabbo habbo) {
+        if (this.habboHasVote(habbo)) return;
+
+        this.votes.add(habbo.getData().getId());
+    }
 }

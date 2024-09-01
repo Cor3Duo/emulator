@@ -136,4 +136,6 @@ public interface IRoomData extends IFillable {
     void setChatProtection(final int chatProtection);
 
     void addTag(final String tag);
+
+    void setScore(final int score);
 }

@@ -323,6 +323,10 @@ public class RoomData implements IRoomData {
         this.tags.add(tag);
     }
 
+    public void setScore(final int score) {
+        this.score = score;
+    }
+
     @Override
     public void fill(IConnectionResult result) throws Exception {
         this.id = result.getInt("id");
