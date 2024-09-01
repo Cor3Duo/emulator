@@ -31,6 +31,8 @@ public class RoomSettingsSaveEvent implements IMessageEventHandler {
         IRoomData roomData = room.getData();
 
         boolean lastWallState = roomData.isHideWall();
+        int lastWallThickness = roomData.getWallThickness();
+        int lastFloorThickness = roomData.getFloorThickness();
 
         roomData.setName(event.readString());
         roomData.setDescription(event.readString());
@@ -49,10 +51,20 @@ public class RoomSettingsSaveEvent implements IMessageEventHandler {
         roomData.setAllowPetsEat(event.readBoolean());
         roomData.setAllowWalkthrough(event.readBoolean());
         roomData.setHideWall(event.readBoolean());
+        roomData.setWallThickness(event.readInt());
+        roomData.setFloorThickness(event.readInt());
+        roomData.setWhoCanMute(event.readInt());
+        roomData.setWhoCanKick(event.readInt());
+        roomData.setWhoCanBan(event.readInt());
+        roomData.setChatMode(event.readInt());
+        roomData.setChatWeight(event.readInt());
+        roomData.setChatSpeed(event.readInt());
+        roomData.setChatDistance(event.readInt());
+        roomData.setChatProtection(event.readInt());
 
         session.send(new RoomSettingsSaveComposer(room));
 
-        boolean needUpdate = lastWallState != roomData.isHideWall();
+        boolean needUpdate = lastWallState != roomData.isHideWall() || lastWallThickness != roomData.getWallThickness() || lastFloorThickness != roomData.getFloorThickness();
         if (needUpdate) {
             session.send(new RoomVisualizationSettingsComposer(room));
         }

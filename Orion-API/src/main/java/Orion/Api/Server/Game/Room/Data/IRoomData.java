@@ -37,11 +37,11 @@ public interface IRoomData extends IFillable {
 
     String getPaperLandscape();
 
-    int getThicknessWall();
+    int getWallThickness();
 
     int getWallHeight();
 
-    int getThicknessFloor();
+    int getFloorThickness();
 
     String getMoodlightData();
 
@@ -114,4 +114,24 @@ public interface IRoomData extends IFillable {
     void setAllowWalkthrough(final boolean allowWalkthrough);
 
     void setHideWall(final boolean hideWall);
+
+    void setWallThickness(final int wallThickness);
+
+    void setFloorThickness(final int floorThickness);
+
+    void setWhoCanMute(final int whoCanMute);
+
+    void setWhoCanKick(final int whoCanKick);
+
+    void setWhoCanBan(final int whoCanBan);
+
+    void setChatMode(final int chatMode);
+
+    void setChatWeight(final int chatWeight);
+
+    void setChatSpeed(final int chatSpeed);
+
+    void setChatDistance(final int chatDistance);
+
+    void setChatProtection(final int chatProtection);
 }

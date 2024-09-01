@@ -25,9 +25,9 @@ public class RoomData implements IRoomData {
     private String paperFloor;
     private String paperWall;
     private String paperLandscape;
-    private int thicknessWall;
+    private int wallThickness;
     private int wallHeight;
-    private int thicknessFloor;
+    private int floorThickness;
     private String moodlightData;
     private List<String> tags;
     private boolean isPublic;
@@ -122,16 +122,16 @@ public class RoomData implements IRoomData {
         return this.paperLandscape;
     }
 
-    public int getThicknessWall() {
-        return this.thicknessWall;
+    public int getWallThickness() {
+        return this.wallThickness;
     }
 
     public int getWallHeight() {
         return this.wallHeight;
     }
 
-    public int getThicknessFloor() {
-        return this.thicknessFloor;
+    public int getFloorThickness() {
+        return this.floorThickness;
     }
 
     public String getMoodlightData() {
@@ -278,6 +278,46 @@ public class RoomData implements IRoomData {
         this.hideWall = hideWall;
     }
 
+    public void setWallThickness(final int wallThickness) {
+        this.wallThickness = wallThickness;
+    }
+
+    public void setFloorThickness(final int floorThickness) {
+        this.floorThickness = floorThickness;
+    }
+
+    public void setWhoCanMute(final int whoCanMute) {
+        this.whoCanMute = whoCanMute;
+    }
+
+    public void setWhoCanKick(final int whoCanKick) {
+        this.whoCanKick = whoCanKick;
+    }
+
+    public void setWhoCanBan(final int whoCanBan) {
+        this.whoCanBan = whoCanBan;
+    }
+
+    public void setChatMode(final int chatMode) {
+        this.chatMode = chatMode;
+    }
+
+    public void setChatWeight(final int chatWeight) {
+        this.chatWeight = chatWeight;
+    }
+
+    public void setChatSpeed(final int chatSpeed) {
+        this.chatSpeed = chatSpeed;
+    }
+
+    public void setChatDistance(final int chatDistance) {
+        this.chatDistance = chatDistance;
+    }
+
+    public void setChatProtection(final int chatProtection) {
+        this.chatProtection = chatProtection;
+    }
+
     @Override
     public void fill(IConnectionResult result) throws Exception {
         this.id = result.getInt("id");
@@ -295,9 +335,9 @@ public class RoomData implements IRoomData {
         this.paperFloor = result.getString("paper_floor");
         this.paperWall = result.getString("paper_wall");
         this.paperLandscape = result.getString("paper_landscape");
-        this.thicknessWall = result.getInt("thickness_wall");
+        this.wallThickness = result.getInt("thickness_wall");
         this.wallHeight = result.getInt("wall_height");
-        this.thicknessFloor = result.getInt("thickness_floor");
+        this.floorThickness = result.getInt("thickness_floor");
         this.moodlightData = result.getString("moodlight_data");
         this.tags = Arrays.asList(result.getString("tags").split(";"));
         this.isPublic = result.getBoolean("is_public");
