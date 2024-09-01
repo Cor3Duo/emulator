@@ -22,7 +22,7 @@ public class RequestRoomMuteEvent implements IMessageEventHandler {
         if (!session.getHabbo().isInRoom()) return;
 
         IRoom room = session.getHabbo().getEntity().getRoom();
-        if (!room.getRightsComponent().hasRights(session.getHabbo())) return;
+        if (!room.habboIsOwner(session.getHabbo())) return;
 
         final boolean muteAll = !room.isMuted();
         room.setIsMuted(muteAll);
