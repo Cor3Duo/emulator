@@ -20,12 +20,13 @@ public class RequestRoomLikeEvent implements IMessageEventHandler {
     @Override
     public void handle(IMessageEvent event, ISession session) {
         IHabbo habbo = session.getHabbo();
-
         if (!habbo.isInRoom()) return;
 
         IRoom room = habbo.getEntity().getRoom();
         IRoomVotesComponent votesComponent = room.getVotesComponent();
         if (votesComponent.habboHasVote(habbo)) return;
+
+        int scores = event.readInt();
 
         int score = room.getData().getScore() + 1;
 
