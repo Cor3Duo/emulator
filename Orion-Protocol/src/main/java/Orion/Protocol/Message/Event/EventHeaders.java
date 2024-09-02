@@ -58,6 +58,7 @@ public abstract class EventHeaders {
     public static final int ToggleFloorItemStateEvent = 99;
     public static final int RequestPlaceItemEvent = 1258;
     public static final int RequestPickupItemEvent = 3456;
+    public static final int RequestGroupCreationInfoEvent = 798;
 
     // Catalog
     public static final int RequestBuyItemEvent = 3492;
