@@ -4,6 +4,7 @@ import Orion.Api.Server.Game.Navigator.Data.INavigatorPublicCategory;
 import Orion.Api.Server.Game.Navigator.INavigatorManager;
 import Orion.Api.Server.Game.Room.Data.IRoomCategory;
 import Orion.Api.Server.Game.Room.Data.Model.IRoomModel;
+import Orion.Api.Server.Game.Room.Group.IRoomGroupManager;
 import Orion.Api.Server.Game.Room.IRoom;
 import Orion.Api.Server.Game.Room.IRoomManager;
 import Orion.Api.Server.Game.Room.Utils.RoomEnvironmentVariables;
@@ -53,6 +54,9 @@ public class RoomManager implements IRoomManager {
     @Inject
     private RoomGlobalCycle roomGlobalCycle;
 
+    @Inject
+    private IRoomGroupManager groupManager;
+
     public RoomManager() {
         this.rooms = new ConcurrentHashMap<>();
         this.roomModels = new ConcurrentHashMap<>();
@@ -68,6 +72,8 @@ public class RoomManager implements IRoomManager {
         this.loadStaffPickedRooms();
 
         this.roomEnvironmentVariables.initialize();
+
+        this.groupManager.initialize();
 
         this.roomGlobalCycle.start();
     }

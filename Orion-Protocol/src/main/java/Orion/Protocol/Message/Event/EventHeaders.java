@@ -59,6 +59,8 @@ public abstract class EventHeaders {
     public static final int RequestPlaceItemEvent = 1258;
     public static final int RequestPickupItemEvent = 3456;
     public static final int RequestGroupCreationInfoEvent = 798;
+    public static final int RequestGroupBadgesEvent = 21;
+    public static final int RequestGroupElementsEvent = 813;
 
     // Catalog
     public static final int RequestBuyItemEvent = 3492;

@@ -97,4 +97,6 @@ public abstract class ComposerHeaders {
     public static int RoomEntityEffectComposer = 1167;
     public static int RoomItemRemoveComposer = 2703;
     public static int ResponseGroupCreationInfoComposer = 2159;
+    public static int ResponseGroupBadgesComposer = 2402;
+    public static int GroupElementsComposer = 2238;
 }
