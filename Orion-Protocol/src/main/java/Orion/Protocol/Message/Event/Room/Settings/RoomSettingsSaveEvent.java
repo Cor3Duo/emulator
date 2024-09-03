@@ -36,10 +36,26 @@ public class RoomSettingsSaveEvent implements IMessageEventHandler {
         int lastWallThickness = roomData.getWallThickness();
         int lastFloorThickness = roomData.getFloorThickness();
 
-        roomData.setName(event.readString());
-        roomData.setDescription(event.readString());
+        String name = event.readString();
+        if (name.length() > 50) {
+            return;
+        }
+
+        String description = event.readString();
+        if (description.length() > 150) {
+            return;
+        }
+
+        String password = event.readString();
+        if (password.length() > 20) {
+            return;
+        }
+
+        // TODO: Apply word filter
+        roomData.setName(name);
+        roomData.setDescription(description);
         roomData.setAccessState(RoomAccessState.values()[event.readInt()]);
-        roomData.setPassword(event.readString());
+        roomData.setPassword(password);
         roomData.setMaxUsers(event.readInt());
         roomData.setCategoryId(event.readInt());
 
